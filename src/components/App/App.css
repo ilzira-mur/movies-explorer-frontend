@@ -1,0 +1,43 @@
+.page {
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', Arial, sans-serif;
+    width: 100%;
+    background: #202020;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+  }
+  .body{
+    background-color: #202020;
+    height: 100%;
+    width : 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.div{
+  border: red 1px Solid;
+}
+.button {
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.link {
+  text-decoration: none;
+  cursor: pointer;
+  display: block;
+  height: 100%;
+}
+
+.link:hover {
+  transition: 0.1s linear;
+  opacity: 0.7;
+}
