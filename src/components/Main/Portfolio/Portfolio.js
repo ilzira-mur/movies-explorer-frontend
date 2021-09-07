@@ -1,4 +1,4 @@
-import React from 'react';
+import './Portfolio.css';
 import linkArrow from '../../../images/link_arrow.svg'
 
 function Portfolio() {

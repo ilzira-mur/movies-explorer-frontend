@@ -11,7 +11,8 @@
     -ms-text-size-adjust: 100%;
     -moz-text-size-adjust: 100%;
   }
-  .body{
+
+.body {
     background-color: #202020;
     height: 100%;
     width : 100%;
@@ -19,22 +20,19 @@
     padding: 0;
 }
 
-.div{
-  border: red 1px Solid;
-}
 .button {
   padding: 0;
   font: inherit;
   color: inherit;
   background-color: transparent;
   cursor: pointer;
+  border: none;
 }
 
 .link {
   text-decoration: none;
   cursor: pointer;
   display: block;
-  height: 100%;
 }
 
 .link:hover {
