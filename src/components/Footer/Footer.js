@@ -10,8 +10,8 @@ function Footer() {
                     <p className="footer__year">&copy; {new Date().getFullYear()}</p>
                     <nav className="footer__links">
                         <a className="link footer__link" href="https://practicum.yandex.ru/" target="_blank" rel="noreferrer">Яндекс.Практикум</a>
-                        <a className="link footer__link" href="https://github.com/" target="_blank" rel="noreferrer">Github</a>
-                        <a className="link footer__link" href="https://www.facebook.com/" target="_blank" rel="noreferrer">Facebook</a>
+                        <a className="link footer__link" href="https://github.com/ilzira-mur" target="_blank" rel="noreferrer">Github</a>
+                        <a className="link footer__link" href="https://www.facebook.com/ilzira.murtazina" target="_blank" rel="noreferrer">Facebook</a>
                     </nav>
                 </div>
             </div>

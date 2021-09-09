@@ -14,9 +14,9 @@ function Login() {
                   </div>
                   <form className="register__form">
                     <p className="register__name">E-mail</p>
-                    <input className="register__input"></input>
+                    <input className="register__input" type="email" placeholder="" required></input>
                     <p className="register__name">Пароль</p>
-                    <input className="register__input"></input>
+                    <input className="register__input" type="password" placeholder="" required></input>
                     <span className="register__error"></span>
                     <button className="link button register__button">Войти</button>
                   </form>

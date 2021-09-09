@@ -16,7 +16,7 @@ function Header({ loggedIn, onNavigation }) {
                             <>
                                 <div className="header__films">
                                 <Link className="link" to="/movies"><p className="link header__sign-up">Фильмы</p></Link>
-                                <Link className="link" to="/saved-movies"><p className="link header__sign-up">Сохранённые фильмы</p></Link>
+                                <Link className="link" to="/saved-movies"><p className="link header__sign-up header__sign-up_type_font">Сохранённые фильмы</p></Link>
                                 </div>
                             </>
                             )}
@@ -26,7 +26,7 @@ function Header({ loggedIn, onNavigation }) {
                             <>
                                 <div className="header__films">
                                 <Link className="link" to="/movies"><p className="link header__sign-up">Фильмы</p></Link>
-                                <Link className="link" to="/saved-movies"><p className="link header__sign-up">Сохранённые фильмы</p></Link>
+                                <Link className="link" to="/saved-movies"><p className="link header__sign-up header__sign-up_type_font">Сохранённые фильмы</p></Link>
                                 </div>
                             </>
                             )}
@@ -36,7 +36,7 @@ function Header({ loggedIn, onNavigation }) {
                             <>
                                 <div className="header__films">
                                 <Link className="link" to="/movies"><p className="link header__sign-up">Фильмы</p></Link>
-                                <Link className="link" to="/saved-movies"><p className="link header__sign-up">Сохранённые фильмы</p></Link>
+                                <Link className="link" to="/saved-movies"><p className="link header__sign-up header__sign-up_type_font">Сохранённые фильмы</p></Link>
                                 </div>
                             </>
                             )}

@@ -53,6 +53,10 @@
     align-items: center;
 }
 
+.header__sign-up_type_font {
+    font-weight: 400;
+}
+
 .header__sign-up_type_account {
     margin-right: 17px;
 }

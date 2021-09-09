@@ -11,10 +11,10 @@ function AboutMe() {
                     <div className="aboutme__column">
                         <h3 className="aboutme__name">Ильзира</h3>
                         <p className="aboutme__about">Фронтенд-разработчик, 29 лет</p>
-                        <p className="aboutme__paragraph">Я родился и живу в .., закончил ... Я люблю слушать музыку, а ещё увлекаюсь бегом. Недавно начал кодить. Прохожу курс по веб-разработке, начал заниматься фриланс-заказами и ушёл с постоянной работы.</p>
+                        <p className="aboutme__paragraph">Я родилась и живу в Екатеринбурге, люблю слушать музыку, а ещё увлекаюсь бегом. Прохожу курс по веб-разработке.</p>
                         <nav className="aboutme__links">
-                            <a className="link aboutme__link" href="https://www.facebook.com/" target="_blank" rel="noreferrer">Facebook</a>
-                            <a className="link aboutme__link" href="https://github.com/" target="_blank" rel="noreferrer">Github</a>
+                            <a className="link aboutme__link" href="https://www.facebook.com/ilzira.murtazina" target="_blank" rel="noreferrer">Facebook</a>
+                            <a className="link aboutme__link" href="https://github.com/ilzira-mur" target="_blank" rel="noreferrer">Github</a>
                         </nav>
                     </div>
                     <img className="aboutme__img" src={aboutmePicture} alt="Фото"></img>

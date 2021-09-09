@@ -64,8 +64,26 @@
     margin-bottom: 0;
 }
 
-.navigation__text:hover {
+.navigation__text:after {
+    content: '';
+    display: block;
     border-bottom: 2px solid #FFF;
+    width: 0;
+    opacity: 0;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+}
+
+.navigation__text_type_small:hover:after {
+    width: 72px;
+    opacity: 1;
+    padding-bottom: 4px;
+}
+
+.navigation__text_type_large:hover:after {
+    width: 200px;
+    opacity: 1;
     padding-bottom: 4px;
 }
 

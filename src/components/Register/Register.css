@@ -69,6 +69,10 @@
     vertical-align: baseline;
 }
 
+.register__input:focus {
+    border-bottom: 1px Solid #4285F4;
+}
+
 .register__input:last-of-type {
     margin-bottom: 83px;
 }

@@ -16,3 +16,9 @@
     text-align: center;
     color: #FFF;
 }
+
+@media screen and (max-width: 320px) {
+    .buttonmore {
+        width: 240px;
+    }
+}
