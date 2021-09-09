@@ -34,9 +34,9 @@
     position: absolute;
     top: 2px;
     left: 0;
-    width: 34px;
-    height: 14px;
-    background: #343434;
+    width: 36px;
+    height: 20px;
+    background: #3ddc84;
     border-radius: 20px;
     border: none;
     transition-delay: 100ms;
@@ -44,22 +44,22 @@
   }
   
   .filtercheckbox__input:checked + label:after {
-    background: #3ddc84;
+    background: #343434;
   }
   
   .filtercheckbox__input + label:before {
     content: '';
     position: absolute;
-    left: 2px;
-    top: 4px;
+    left: 22px;
+    top: 6px;
     width: 10px;
     height: 10px;
     border-radius: 10px;
     background: #fff;
     z-index: 1;
-    transition: left 100ms ease-in-out;
+    transition: left 100ms linear;
   }
   
   .filtercheckbox__input:checked + label:before {
-    left: 22px;
+    left: 6px;
   }

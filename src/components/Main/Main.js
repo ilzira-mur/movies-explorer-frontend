@@ -8,12 +8,12 @@ import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
 
 
-function Main({loggedIn}) {
+function Main({loggedIn, onNavigation}) {
     
 
     return (
         <main className="main">
-            <Header loggedIn={loggedIn}/>
+            <Header loggedIn={loggedIn} onNavigation={onNavigation} />
             <Promo />
             <AboutProject />
             <Thechs />

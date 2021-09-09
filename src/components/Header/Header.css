@@ -70,10 +70,28 @@
     margin-right: auto;
 }
 
+.header__menu {
+    display: none;
+    width: 44px;
+    height: 44px;
+}
+
 
 @media screen and (max-width: 768px) {
     .header__container {
         margin: 0 30px;
+    }
+
+    .header__films {
+        display: none;
+    }
+
+    .header__menu {
+        display: block;
+    }
+
+    .header__account {
+        display: none;
     }
 }
 
@@ -93,5 +111,10 @@
         height: 26px;
         font-size: 10px;
         line-height: 16px;
+    }
+
+    .header__menu {
+        width: 40px;
+        height: 43px;
     }
 }

@@ -48,4 +48,31 @@
     width: 30px;
     height: 30px;
     margin: 0;
+    background-image: url(../../../images/saved_movie_button.svg);
+}
+
+.moviescard__button_type_active {
+    background-image: url(../../../images/saved_movie_button_active.svg);
+}
+
+@media screen and (max-width: 1024px) {
+    .moviescard {
+        max-width: 339px;
+        height: 258px;
+    }
+
+    .moviescard__img {
+        max-width: 339px;
+    }
+}
+
+@media screen and (max-width: 425px) {
+    .moviescard {
+        max-width: 300px;
+        height: 236px;
+    }
+
+    .moviescard__img {
+        max-width: 300px;
+    }
 }

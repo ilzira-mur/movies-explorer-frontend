@@ -1,0 +1,7 @@
+.saved-movies {
+    max-width: 1280px;
+    background-color: #202020;
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+}

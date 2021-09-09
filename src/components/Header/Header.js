@@ -1,9 +1,10 @@
 import './Header.css';
 import logo from '../../images/logo_main.svg';
 import icon from '../../images/account_icon.svg';
+import menu from '../../images/burger_menu.svg';
 import { Link, Route, Switch } from 'react-router-dom';
 
-function Header({ loggedIn }) {
+function Header({ loggedIn, onNavigation }) {
 
     return (
         <header className="header" >
@@ -57,6 +58,7 @@ function Header({ loggedIn }) {
                             {!loggedIn && (
                             <>
                                 <div className="header__login">
+                                <img className="link button header__menu" onClick={onNavigation} src={menu} alt="Меню"/>
                                 <Link className="link" to="/profile">
                                     <div className="header__account">
                                         <p className="link header__sign-up header__sign-up_type_account">Аккаунт</p>
@@ -71,6 +73,7 @@ function Header({ loggedIn }) {
                             {!loggedIn && (
                             <>
                                 <div className="header__login">
+                                <img className="link button header__menu" onClick={onNavigation} src={menu} alt="Меню"/>
                                 <Link className="link" to="/profile">
                                     <div className="header__account">
                                         <p className="link header__sign-up header__sign-up_type_account">Аккаунт</p>
@@ -85,6 +88,7 @@ function Header({ loggedIn }) {
                             {!loggedIn && (
                             <>
                                 <div className="header__login">
+                                <img className="link button header__menu" onClick={onNavigation} src={menu} alt="Меню"/>
                                 <Link className="link" to="/profile">
                                     <div className="header__account">
                                         <p className="link header__sign-up header__sign-up_type_account">Аккаунт</p>

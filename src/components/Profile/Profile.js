@@ -2,11 +2,11 @@ import React from 'react';
 import './Profile.css';
 import Header from '../Header/Header';
 
-function Profile() {
+function Profile({ onNavigation }) {
 
     return (
         <section className="register">
-                 <Header />
+                 <Header onNavigation={onNavigation}/>
                  <h2 className="profile__header">Привет, Виталий!</h2>
                  <div className="profile__info">
                     <div className="profile__data">
@@ -18,8 +18,8 @@ function Profile() {
                         <p className="profile__text">pochta@yandex.ru</p>
                     </div>
                  </div>
-                 <buttom className="link button profile__button">Редактировать</buttom>
-                 <buttom className="link button profile__button profile__button_tupe_exit">Выйти из аккаунта</buttom>
+                 <p className="link button profile__button">Редактировать</p>
+                 <p className="link button profile__button profile__button_tupe_exit">Выйти из аккаунта</p>
         </section>
     );
 }
