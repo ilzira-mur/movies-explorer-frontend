@@ -18,7 +18,7 @@ function AboutProject() {
                 </div>
                 <div className="aboutproject__line">
                     <div className="aboutproject__dataline">
-                        <p className="aboutproject__block">1 неделя</p>
+                        <p className="aboutproject__block aboutproject__block_type_colour">1 неделя</p>
                         <p className="aboutproject__block aboutproject__block_large">4 недели</p>
                     </div>
                     <div className="aboutproject__dataline">

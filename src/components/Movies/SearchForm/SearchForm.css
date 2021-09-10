@@ -37,7 +37,7 @@
     padding-left: 22px;
     padding-right: 0;
     margin: 0;
-    font-family: Inter;
+    font-family: 'Inter', Arial, sans-serif;
     font-size: 13px;
     font-style: normal;
     font-weight: 400;
@@ -53,6 +53,10 @@
     width: 100%;
     box-sizing: border-box;
     outline: none;
+}
+
+.searchform__input:focus {
+    border-bottom: 1px Solid #4285F4;
 }
 
 .searchform__button {
@@ -71,17 +75,9 @@
     }
 }
 
-@media screen and (max-width: 320px) {
+@media screen and (max-width: 425px) {
     .searchform {
         margin-left: 14px;
         margin-right: 14px;
-    }
-
-    .searchform__imput {
-        max-width: 292px;
-    }
-
-    .searchform__input {
-        max-width: 292px;
     }
 }

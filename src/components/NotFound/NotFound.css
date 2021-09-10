@@ -7,7 +7,7 @@
 }
 
 .not-found__header {
-    font-family: Inter;
+    font-family: 'Inter', Arial, sans-serif;
     font-size: 140px;
     font-style: normal;
     font-weight: 400;
@@ -20,7 +20,7 @@
 }
 
 .not-found__text {
-    font-family: Inter;
+    font-family: 'Inter', Arial, sans-serif;
     font-size: 16px;
     font-style: normal;
     font-weight: 400;
@@ -33,7 +33,7 @@
 }
 
 .not-found__link {
-    font-family: Inter;
+    font-family: 'Inter', Arial, sans-serif;
     font-size: 14px;
     font-style: normal;
     font-weight: 400;
@@ -54,7 +54,7 @@
     }
 }
 
-@media screen and (max-width: 320px) {
+@media screen and (max-width: 425px) {
     .not-found__header {
         margin-top: 329px;
         font-size: 80px;

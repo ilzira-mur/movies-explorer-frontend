@@ -12,7 +12,7 @@
 }
 
 .aboutproject__header {
-    font-family: Inter;
+    font-family: 'Inter', Arial, sans-serif;
     font-size: 22px;
     font-style: normal;
     font-weight: 400;
@@ -52,7 +52,7 @@
 }
 
 .aboutproject__lead {
-    font-family: Inter;
+    font-family: 'Inter', Arial, sans-serif;
     font-size: 20px;
     font-style: normal;
     font-weight: 400;
@@ -65,7 +65,7 @@
 }
 
 .aboutproject__paragraph {
-    font-family: Inter;
+    font-family: 'Inter', Arial, sans-serif;
     font-size: 14px;
     font-style: normal;
     font-weight: 400;
@@ -102,11 +102,16 @@
     align-items: center;
     justify-content: center;
     margin: 0;
+    font-family: 'Inter', Arial, sans-serif;
     font-style: normal;
     font-weight: 400;
     font-size: 14px;
     line-height: 17px;
     color: #FFF;
+}
+
+.aboutproject__block_type_colour {
+    color: #000;
 }
 
 .aboutproject__block_large {
@@ -149,7 +154,7 @@
     }
 }
 
-@media screen and (max-width: 320px) {
+@media screen and (max-width: 425px) {
     .aboutproject__container {
         margin: 0 18px;
     }
@@ -187,7 +192,7 @@
     }
 
     .aboutproject__line {
-        max-width: 284px;
+        max-width: 389px;
         margin-bottom: 70px;
     }
 
@@ -202,4 +207,10 @@
         max-width: calc(100% / 3 * 2);
     }
 
+}
+
+@media screen and (max-width: 320px) {
+    .aboutproject__line {
+        max-width: 284px;
+    }
 }

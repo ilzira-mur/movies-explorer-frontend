@@ -1,5 +1,5 @@
 .profile__header {
-    font-family: Inter;
+    font-family: 'Inter', Arial, sans-serif;
     font-size: 24px;
     font-style: normal;
     font-weight: 500;
@@ -34,7 +34,7 @@
 }
 
 .profile__text {
-    font-family: Inter;
+    font-family: 'Inter', Arial, sans-serif;
     font-size: 11px;
     font-style: normal;
     font-weight: 400;
@@ -48,7 +48,7 @@
 
 .profile__button {
     margin-bottom: 16px;
-    font-family: Inter;
+    font-family: 'Inter', Arial, sans-serif;
     font-size: 13px;
     font-style: normal;
     font-weight: 400;
@@ -78,7 +78,7 @@
     }
 }
 
-@media screen and (max-width: 320px) {
+@media screen and (max-width: 425px) {
     .profile__header {
         margin-bottom: 80px;
         margin-top: 70px;

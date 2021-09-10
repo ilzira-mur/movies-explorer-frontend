@@ -9,7 +9,7 @@
 }
 
 .aboutme__header {
-    font-family: Inter;
+    font-family: 'Inter', Arial, sans-serif;
     font-size: 22px;
     font-style: normal;
     font-weight: 400;
@@ -39,7 +39,7 @@
 }
 
 .aboutme__name {
-    font-family: Inter;
+    font-family: 'Inter', Arial, sans-serif;
     font-size: 50px;
     font-style: normal;
     font-weight: 400;
@@ -52,7 +52,7 @@
 }
 
 .aboutme__about {
-    font-family: Inter;
+    font-family: 'Inter', Arial, sans-serif;
     font-size: 18px;
     font-style: normal;
     font-weight: 500;
@@ -65,7 +65,7 @@
 }
 
 .aboutme__paragraph {
-    font-family: Inter;
+    font-family: 'Inter', Arial, sans-serif;
     font-size: 14px;
     font-style: normal;
     font-weight: 400;
@@ -88,7 +88,7 @@
 }
 
 .aboutme__link {
-    font-family: Inter;
+    font-family: 'Inter', Arial, sans-serif;
     font-size: 14px;
     font-style: normal;
     font-weight: 500;
@@ -120,6 +120,7 @@
     }
 
     .aboutme__container {
+        max-width: 668px;
         margin: 0 50px;
     }
 
@@ -148,7 +149,7 @@
     }
 }
 
-@media screen and (max-width: 425px) {
+@media screen and (max-width: 575px) {
     .aboutme {
         margin-top: 70px;
         margin-bottom: 69px;

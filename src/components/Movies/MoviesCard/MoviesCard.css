@@ -20,7 +20,7 @@
 }
 
 .moviescard__name {
-    font-family: Inter;
+    font-family: 'Inter', Arial, sans-serif;
     font-size: 15px;
     font-style: normal;
     font-weight: 500;
@@ -33,7 +33,7 @@
 }
 
 .moviescard__time {
-    font-family: Inter;
+    font-family: 'Inter', Arial, sans-serif;
     font-size: 11px;
     font-style: normal;
     font-weight: 400;
@@ -51,7 +51,10 @@
     background-image: url(../../../images/saved_movie_button.svg);
 }
 
-.moviescard__button_type_active {
+.moviescard__button_active {
+    width: 30px;
+    height: 30px;
+    margin: 0;
     background-image: url(../../../images/saved_movie_button_active.svg);
 }
 
@@ -60,13 +63,9 @@
         max-width: 339px;
         height: 258px;
     }
-
-    .moviescard__img {
-        max-width: 339px;
-    }
 }
 
-@media screen and (max-width: 425px) {
+@media screen and (max-width: 656px) {
     .moviescard {
         max-width: 300px;
         height: 236px;
