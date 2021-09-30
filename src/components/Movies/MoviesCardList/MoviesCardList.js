@@ -1,22 +1,11 @@
 import './MoviesCardList.css';
 import MoviesCard from '../MoviesCard/MoviesCard';
 
-function MoviesCardList() {
+function MoviesCardList({cards, onCardLike}) {
 
     return(
         <section className="moviescardlist">
-            <MoviesCard />
-            <MoviesCard />
-            <MoviesCard />
-            <MoviesCard />
-            <MoviesCard />
-            <MoviesCard />
-            <MoviesCard />
-            <MoviesCard />
-            <MoviesCard />
-            <MoviesCard />
-            <MoviesCard />
-            <MoviesCard />
+            { cards.map(card => (<MoviesCard {...cards} key={card.id} card={card} onCardLike={onCardLike} />)) }
         </section>
     );
 }

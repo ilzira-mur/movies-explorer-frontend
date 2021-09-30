@@ -30,6 +30,10 @@
     color: #FFF;
     margin-top: 0;
     margin-bottom: 9px;
+    overflow: hidden;
+white-space: nowrap;
+text-overflow: ellipsis;
+max-width: 280px;
 }
 
 .moviescard__time {
@@ -58,10 +62,21 @@
     background-image: url(../../../images/saved_movie_button_active.svg);
 }
 
+.moviescard__img {
+    max-width: 364px;
+    width: 100%;
+    max-height: 203px;
+    height: 100%;
+}
+
 @media screen and (max-width: 1024px) {
     .moviescard {
         max-width: 339px;
         height: 258px;
+    }
+
+    .moviescard__name {
+        max-width: 250px;
     }
 }
 
@@ -73,5 +88,10 @@
 
     .moviescard__img {
         max-width: 300px;
+        max-height: 168px;
+    }
+
+    .moviescard__name {
+        max-width: 210px;
     }
 }

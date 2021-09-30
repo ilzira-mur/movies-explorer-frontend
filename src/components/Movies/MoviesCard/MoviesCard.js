@@ -1,25 +1,28 @@
 import React from 'react';
 import './MoviesCard.css';
-import cardImage from '../../../images/test_cards.jpg';
 
-function MoviesCard() {
+function MoviesCard({card, onCardLike}) {
     
     const [isSavedMovie, setSavedMovie] = React.useState(false);
-
+    const hour = ~~(card.duration / 60);
+    const minute = (card.duration % 60);
+    const time = `${hour === 0 ? "" : hour + 'ч '}${minute === 0 ? "" : minute + 'м'}`;
+    
     const handleSavedMovie = () => {
         setSavedMovie(true);
+        onCardLike(card);
     }
     
     return(
         <div className="moviescard">
             <div className="moviescard__data">
                 <div className="moviescard__about">
-                    <p className="moviescard__name">33 слова о дизайне</p>
-                    <p className="moviescard__time">1ч 47м</p>
+                    <p className="moviescard__name">{card.nameRU}</p>
+                    <p className="moviescard__time">{time}</p>
                 </div>
                 <button onClick={handleSavedMovie} className={`link button moviescard__button ${isSavedMovie ? "moviescard__button_active" : ""}`}></button>
             </div>
-            <img className="moviescard__img" src={cardImage} alt="Картинка"></img>
+            <img className="moviescard__img" src={card.image} alt={card.nameRU}></img>
         </div>
     );
 }

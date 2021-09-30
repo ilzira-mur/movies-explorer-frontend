@@ -1,9 +1,23 @@
-import React from 'react';
+import React, { useState } from 'react';
 import '../Register/Register.css';
 import logo from '../../images/logo_main.svg';
 import { Link } from 'react-router-dom';
 
-function Login() {
+function Login({ handleLogin }) {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('')
+  
+  const handleChangeEmail = (e) => {
+      setEmail(e.target.value)
+  }
+
+  const handleChangePassword = (e) => {
+    setPassword(e.target.value)
+  }
+  function handleSubmit(e) {
+    e.preventDefault();
+    handleLogin(email, password);
+  }
 
     return (
         <section className="register">
@@ -12,11 +26,11 @@ function Login() {
                     <Link to="/" className="link header__logo"><img src={logo} alt="Логотип"/></Link>
                     <h2 className="register__header">Рады видеть!</h2>
                   </div>
-                  <form className="register__form">
+                  <form onSubmit={handleSubmit} className="register__form">
                     <p className="register__name">E-mail</p>
-                    <input className="register__input" type="email" placeholder="" required></input>
+                    <input onChange={handleChangeEmail} className="register__input" type="email" placeholder="" required></input>
                     <p className="register__name">Пароль</p>
-                    <input className="register__input" type="password" placeholder="" required></input>
+                    <input onChange={handleChangePassword} className="register__input" type="password" placeholder="" required></input>
                     <span className="register__error"></span>
                     <button className="link button register__button">Войти</button>
                   </form>

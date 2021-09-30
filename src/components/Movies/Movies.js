@@ -4,15 +4,54 @@ import MoviesCardList from '../Movies/MoviesCardList/MoviesCardList';
 import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
 import ButtonMore from '../Movies/ButtonMore/ButtonMore';
+import Preloader from '../Movies/Preloader/Preloader';
+import { useEffect, useState } from 'react';
 
-function Movies({ onNavigation }) {
+function Movies({ filteredCards = "", loading, errorQuery, emptyResult, emptyQuery,
+onSubmit, onCardLike, savedCards, owner, onCheckbox, checkbox, popupError, onNavigation, cards }) {
+
+    function setCountCard(str) {
+        let initCountCards = 0;
+        let addCountCards = 0;
+        const pageWidth = document.documentElement.scrollWidth;
+    
+        if (pageWidth < 1280) {
+          initCountCards = 8;
+          addCountCards = 2;
+        } else {
+          initCountCards = 12;
+          addCountCards = 3;
+        };
+        if (pageWidth < 768) {
+          initCountCards = 5;
+          addCountCards = 2;
+        }
+        if (str === 'init') {
+          return initCountCards
+        } else {
+          return addCountCards
+        }
+      }
+
+
+      useEffect(() => {
+        window.addEventListener('resize', setCountCard);
+      }, []);
+      
+      const [countCards, setCountCards] = useState(setCountCard('init'));
+    
+      function handleClick() {
+        setCountCards(countCards + setCountCard('add'));
+      }
+    
 
     return(
         <section className="movies">
                 <Header onNavigation={onNavigation}/>
-                <SearchForm />
-                <MoviesCardList />
-                <ButtonMore />
+                <SearchForm onSubmit={onSubmit}/>
+                {loading && (<Preloader />)}
+                <MoviesCardList cards={cards} onCardLike={onCardLike}/>
+                <ButtonMore onClick={handleClick} />
                 <Footer />
         </section>
     );

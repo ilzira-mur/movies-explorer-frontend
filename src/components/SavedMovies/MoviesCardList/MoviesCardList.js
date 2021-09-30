@@ -1,13 +1,14 @@
 import './MoviesCardList.css';
 import MoviesCard from '../MoviesCard/MoviesCard';
 
-function MoviesCardList() {
+function MoviesCardList({ savedCards, onCardRemove, owner }) {
 
     return(
         <section className="moviescardlist">
-            <MoviesCard />
-            <MoviesCard />
-            <MoviesCard />
+            { savedCards &&
+        savedCards.map((item) => item.owner === owner ? (
+          <MoviesCard key={item.movieId} card={item} onCardRemove={onCardRemove} />
+        ) : '')}
         </section>
     );
 }
