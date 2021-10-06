@@ -14,29 +14,27 @@ showSavedSearchedMovies, isSavedSearch, foundSavedMovies }) {
 
     const currentUser = useContext(CurrentUserContext);
     const [shortSavedMovies, setShortSavedMovies] = useState([]);
-    const SHORT_MOVIES_DURATION = 40;
 
     function checkOwnerCardList() {
         return savedCards.some(item => item.owner === currentUser._id)
       }
       useEffect(() => {
-        const cards = foundSavedMovies.length !== 0 ? foundSavedMovies : savedCards;
-        setShortSavedMovies(cards.filter(card => card.duration <= SHORT_MOVIES_DURATION));
-      }, [savedCards, foundSavedMovies]);
+        setShortSavedMovies(savedCards.filter(card => card.duration <= 40));
+      }, [savedCards]);
     
     return (
         <section className="saved-movies">
             <Header onNavigation={onNavigation}/>
             <SearchForm isSavedSearch={isSavedSearch} onSubmit={onSubmit} savedMovieSearch={savedMovieSearch} isSavedMovies={isSavedMovies}
-            showSavedSearchedMovies={showSavedSearchedMovies}/>
+            showSavedSearchedMovies={showSavedSearchedMovies} onCheckbox={onCheckbox} checkbox={checkbox}/>
             {loading && (<Preloader />)}
             {checkOwnerCardList() ? foundSavedMovies.length ?
             (<MoviesCardList isSavedSearch={isSavedSearch}  owner={currentUser._id}
-                savedCards={checkbox ? shortSavedMovies : foundSavedMovies} onCardRemove={onCardRemove} foundSavedMovies={foundSavedMovies} isSavedMovies={isSavedMovies}/>)
+                savedCards={checkbox ? foundSavedMovies : shortSavedMovies} onCardRemove={onCardRemove} foundSavedMovies={foundSavedMovies} isSavedMovies={isSavedMovies}/>)
             :
             (<MoviesCardList
                 owner={currentUser._id}
-                savedCards={checkbox ? shortSavedMovies : savedCards} onCardRemove={onCardRemove} foundSavedMovies={foundSavedMovies} isSavedMovies={isSavedMovies} />)
+                savedCards={checkbox ? savedCards : shortSavedMovies} onCardRemove={onCardRemove} foundSavedMovies={foundSavedMovies} isSavedMovies={isSavedMovies} />)
                 : ''
             }
             <Footer />

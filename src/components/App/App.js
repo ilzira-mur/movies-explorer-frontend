@@ -26,14 +26,14 @@ function App() {
     const [moviesCards, setMoviesCards] = useState([]);
     const [userData, setUserData] = useState({});
     const [isAuthSuccess, setAuthSuccess] = React.useState(false);
-    const [checkboxSavedCards, setCheckboxSavedCards] = useState(true);
-    const [checkboxCards, setCheckboxCards] = useState(true);
     const [isShortMovies, setIsShortMovies] = React.useState(false);
     const [foundMovies, setFoundMovies] = React.useState([]);
     const [foundSavedMovies, setFoundSavedMovies] = React.useState([]);
     const [savedMovies, setSavedMovies] = React.useState([]);
     const [isSavedMoviesState, setIsSavedMoviesState] = React.useState(true);
     const [isSavedSearch, setIsSavedSearch] = React.useState(false);
+    const [checkboxSavedCards, setCheckboxSavedCards] = useState(true);
+    const [checkboxCards, setCheckboxCards] = useState(true);
     const history = useHistory();
     
     useEffect(() => {
@@ -279,7 +279,6 @@ function App() {
                 <ProtectedRoute 
                   loggedIn={loggedIn}
                   onCardLike={handleCardLike}
-                  onCheckbox={handleCheckboxCards}
                   path="/movies"
                   component={Movies}
                   onNavigation={handleNavigationClick}
@@ -290,24 +289,26 @@ function App() {
                   filteredCards={filteredCards}
                   owner={currentUser._id}
                   savedCards={savedCards}
+                  onCheckbox={handleCheckboxCards}
                   checkbox={checkboxCards} />
                 <ProtectedRoute loggedIn={loggedIn} onSignOut={onSignOut} onUpdateUser={handleUpdateUser} path="/profile" component={Profile} onNavigation={handleNavigationClick} name={userData.name} email={userData.email}/>
                 <ProtectedRoute 
-                loggedIn={loggedIn}
-                onCardRemove={handleCardLike}
-                onCheckbox={handleCheckboxSavedCards}
-                path="/saved-movies"
-                component={SavedMovies}
-                onNavigation={handleNavigationClick}
-                loading={loading}
-                savedCards={savedCards}
-                showSavedSearchedMovies={showSavedSearchedMovies}
-                cards={savedMovies}
-                foundSavedMovies={foundSavedMovies}
-                isSavedMovies={isSavedMoviesState}
-                isSavedSearch={isSavedSearch}
-                savedMovies={savedMovies}
-                savedMovieSearch={savedMovieSearch} />
+                  loggedIn={loggedIn}
+                  onCardRemove={handleCardLike}
+                  path="/saved-movies"
+                  component={SavedMovies}
+                  onNavigation={handleNavigationClick}
+                  loading={loading}
+                  savedCards={savedCards}
+                  showSavedSearchedMovies={showSavedSearchedMovies}
+                  cards={savedMovies}
+                  foundSavedMovies={foundSavedMovies}
+                  isSavedMovies={isSavedMoviesState}
+                  isSavedSearch={isSavedSearch}
+                  savedMovies={savedMovies}
+                  savedMovieSearch={savedMovieSearch}
+                  onCheckbox={handleCheckboxSavedCards}
+                  checkbox={checkboxSavedCards} />
                 <Route>
                     <NotFound />
                 </Route>

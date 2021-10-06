@@ -1,10 +1,16 @@
 import './FilterCheckbox.css';
 
-function FilterCheckbox() {
+function FilterCheckbox({ onCheckbox, checkbox }) {
+
+    function handleCheckbox() {
+        onCheckbox();
+        console.log(onCheckbox())
+      }
+
 
     return(
         <div className="filtercheckbox__container">
-            <input type="checkbox" className="filtercheckbox__input" name="filtercheckbox" id="filtercheckbox"></input>
+            <input onClick={handleCheckbox} defaultChecked={checkbox} type="checkbox" className="filtercheckbox__input" name="filtercheckbox" id="filtercheckbox"></input>
             <label className="link filtercheckbox__label" htmlFor="filtercheckbox">Короткометражки</label>
 
         </div>

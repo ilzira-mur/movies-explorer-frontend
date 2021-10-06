@@ -10,6 +10,12 @@ import { useEffect, useState } from 'react';
 function Movies({ foundMovies, loading, onSubmit, onCardLike, onNavigation, cards, savedCards, owner, filteredCards = "", errorQuery, emptyResult, emptyQuery,  onCheckbox, checkbox, popupError, movieSearch }) {
   
   const [countCards, setCountCards] = useState(setCountCard('init'));
+  const [shortMovies, setShortMovies] = useState([]);
+
+   
+      useEffect(() => {
+        setShortMovies(cards.filter(card => card.duration <= 40));
+      }, [cards]);
 
   function setCountCard(str) {
     let initCountCards = 0;
@@ -48,7 +54,7 @@ function Movies({ foundMovies, loading, onSubmit, onCardLike, onNavigation, card
                 <Header onNavigation={onNavigation}/>
                 <SearchForm onSubmit={onSubmit} onCheckbox={onCheckbox} checkbox={checkbox} movieSearch={movieSearch} />
                 {loading && (<Preloader />)}
-                <MoviesCardList cards={cards} onCardLike={onCardLike} foundMovies={foundMovies} countCards={countCards} savedCards={savedCards} owner={owner} />
+                <MoviesCardList cards={checkbox ? cards : shortMovies} onCardLike={onCardLike} foundMovies={foundMovies} countCards={countCards} savedCards={savedCards} owner={owner} />
                 <ButtonMore onClick={handleClick} />
                 <Footer />
         </section>

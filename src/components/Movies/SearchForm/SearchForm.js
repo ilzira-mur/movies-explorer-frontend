@@ -39,7 +39,7 @@ function SearchForm({ isSavedMovies, showSavedSearchedMovies, savedMovieSearch, 
                         <button type="submit" name="button" className="link button searchform__button"><img src={SearchformButton} alt="Кнопка"></img></button>
                     </form>
                 </div>
-            <FilterCheckbox />
+            <FilterCheckbox onCheckbox={onCheckbox} checkbox={checkbox} />
         </section>
         </>
         ) : (
@@ -51,7 +51,7 @@ function SearchForm({ isSavedMovies, showSavedSearchedMovies, savedMovieSearch, 
                         <button type="submit" name="button" className="link button searchform__button"><img src={SearchformButton} alt="Кнопка"></img></button>
                     </form>
                 </div>
-            <FilterCheckbox />
+            <FilterCheckbox onCheckbox={onCheckbox} checkbox={checkbox} />
         </section>
         </>
         )}
