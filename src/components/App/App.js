@@ -15,74 +15,99 @@ import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 
 function App() {
-    // eslint-disable-next-line
+  
     const [loggedIn, setLoggedIn] = useState(false);
-    const [isNavigationOpen, setNavigationOpen] = React.useState(false);
+    const [isNavigationOpen, setNavigationOpen] = useState(false);
     const [savedCards, setSavedCards] = useState([]);
-    // eslint-disable-next-line
     const [filteredCards, setFilteredCards] = useState([]);
-    // eslint-disable-next-line
-    const [filteredSavedCards, setFilteredSavedCards] = useState([])
     const [cards, setCards] = React.useState([]);
     const [loading, setLoading] = useState(false);
-    // eslint-disable-next-line
     const [currentUser, setCurrentUser] = React.useState({});
+    const [moviesCards, setMoviesCards] = useState([]);
     const [userData, setUserData] = useState({});
-    // eslint-disable-next-line
     const [isAuthSuccess, setAuthSuccess] = React.useState(false);
-    const [checkboxSavedCards, setCheckboxSavedCards] = useState(true);// Состояние чекбокса в SavedCards
+    const [checkboxSavedCards, setCheckboxSavedCards] = useState(true);
     const [checkboxCards, setCheckboxCards] = useState(true);
+    const [isShortMovies, setIsShortMovies] = React.useState(false);
+    const [foundMovies, setFoundMovies] = React.useState([]);
+    const [foundSavedMovies, setFoundSavedMovies] = React.useState([]);
+    const [savedMovies, setSavedMovies] = React.useState([]);
+    const [isSavedMoviesState, setIsSavedMoviesState] = React.useState(true);
+    const [isSavedSearch, setIsSavedSearch] = React.useState(false);
     const history = useHistory();
     
+    useEffect(() => {
+      tokenCheck();
+      // eslint-disable-next-line
+    }, []);
+  
+    const tokenCheck = () => {
+      const token = localStorage.getItem('token');
+      if (token) {
+        mainApi.getContent(token)
+        .then((res) => {
+          if (res) {
+            setUserData({
+              name: res.name,
+              email: res.email
+            });
+            setLoggedIn(true);
+            history.push('/movies');
+          }
+        })
+        .catch((err) => {console.log(`${err}`)}
+        )}
+    }
 
     useEffect(()=>{
+      setLoading(true)
       if (loggedIn) {
-        Promise.all([mainApi.getUserInfo(), moviesApi.getMoviesCard()])
+        Promise.all([
+          mainApi.getUserInfo(),
+          moviesApi.getMoviesCard()])
         .then(([userInfo, cards]) => {
-            setCards(cards.map(card => handleMovieCard(card)));
-            setCurrentUser(userInfo)
-          }).catch(err => console.log(`${err}`))
+          setCards(cards.map(card => handleMovieCard(card)));
+          setCurrentUser(userInfo)
+        })
+        .catch(err => console.log(`${err}`))
+        .finally(() => {
+          setLoading(false);
+        });
+        if (localStorage.getItem("allMovies")) {
+          setMoviesCards(JSON.parse(localStorage.getItem("allMovies")));
+        }
         }
   }, [loggedIn])
+  
 
-  useEffect(() => {
-    tokenCheck();
-    // eslint-disable-next-line
-  }, []);
-
-  const tokenCheck = () => {
-    const token = localStorage.getItem('token');
-    console.log(token)
-    if (token) {
-      mainApi.getContent(token)
-      .then((res) => {
-        if (res) {
-          setUserData({
-            name: res.name,
-            email: res.email
-          });
-          setLoggedIn(true);
-          history.push('/profile');
-        }
-      })
-      .catch((err) => {
-        if (err === 401) {
-          console.log(`401 — Переданный токен некорректен`);
-        }
-        if (err === 400) {
-          console.log(`400 — Токен не передан или передан не в том формате`);
-        }
-        else {
-          console.log(`${err}`)
-        }
-      })
-    }
-  }
-
+  
   const LS_CARDS = 'cards';
   const LS_SAVED_CARDS = 'saved-cards';
   const LS_FILTERED_CARDS = 'filtered-cards';
   const LS_FILTERED_SAVED_CARDS = 'filtered-saved-cards';
+  const JWT = 'token';
+  const SHORT_MOVIE_DURATION = 40;
+  
+  useEffect(() => {
+    if (loggedIn) {
+      if (!localStorage.getItem(LS_SAVED_CARDS)) {
+        getSavedMovies();
+      } else {
+        setSavedCards(JSON.parse(localStorage.getItem(LS_SAVED_CARDS)));
+      }
+    }
+  }, [currentUser, loggedIn]);
+
+  function getSavedMovies() {
+    mainApi
+      .getMoviesCard(localStorage.getItem(JWT))
+      .then((cards) => {
+        setSavedCards(cards);
+        localStorage.setItem(LS_SAVED_CARDS, JSON.stringify(cards));
+      })
+      .catch((err) => {console.log(`${err}`)}
+        );
+  }
 
   useEffect(() => {
     localStorage.getItem(LS_CARDS) && setCards(JSON.parse(localStorage.getItem(LS_CARDS)));
@@ -91,13 +116,14 @@ function App() {
   useEffect(() => {
     localStorage.getItem(LS_FILTERED_CARDS) && setFilteredCards(
       JSON.parse(localStorage.getItem(LS_FILTERED_CARDS)));
-    localStorage.getItem(LS_FILTERED_SAVED_CARDS) && setFilteredSavedCards(
+    localStorage.getItem(LS_FILTERED_SAVED_CARDS) && setFoundSavedMovies(
       JSON.parse(localStorage.getItem(LS_FILTERED_SAVED_CARDS)));
   }, []);
 
   useEffect(() => {
     loggedIn && localStorage.setItem(LS_SAVED_CARDS, JSON.stringify(savedCards));
   }, [savedCards, loggedIn]);
+
 
     const handleNavigationClick = () => {
         setNavigationOpen(true);
@@ -106,12 +132,12 @@ function App() {
     const closeNavigation = () => {
         setNavigationOpen(false);
     }
-    const URL_SERVER_MOVIES_API = "https://api.nomoreparties.co";
+    const urlServerApi = "https://api.nomoreparties.co";
     const handleMovieCard = (card) => {
         const { country, director, duration, year, description,
-            image_select: image = URL_SERVER_MOVIES_API + card.image.url,
+            image_select: image = urlServerApi + card.image.url,
             trailer = card.trailerLink,
-            thumbnail = URL_SERVER_MOVIES_API + card.image.formats.thumbnail.url,
+            thumbnail = urlServerApi + card.image.formats.thumbnail.url,
             nameEN, nameRU, id } = card;
           return {
             country, director, duration, year, description, image, trailer, thumbnail,
@@ -119,17 +145,40 @@ function App() {
           }
     }
 
-    const handleMoviesSearch = () => {
-        let handleMovieCards;
-        setLoading(true);
-        moviesApi.getMoviesCard()
-        .then((cards) => {
-            handleMovieCards = cards.map(card => handleMovieCard(card))
-            setCards(handleMovieCards);
-            setLoading(false);
-        })
-        .catch(err => console.log(`${err}`))
+  function movieSearch(searchBar) {
+    if (isShortMovies) {
+      const shortMovie = cards.filter((movie) => {
+        return (
+          movie.duration <= SHORT_MOVIE_DURATION &&
+          movie.nameRU.toLowerCase().includes(searchBar.toLowerCase())
+        );
+      });
+      setFoundMovies(shortMovie);
+    } else {
+      const foundMovie = cards.filter((movie) => {
+        return movie.nameRU.toLowerCase().includes(searchBar.toLowerCase());
+      });
+      return setFoundMovies(foundMovie);
     }
+  }
+
+  function savedMovieSearch(searchBar) {
+    if (isShortMovies) {
+      const shortMovie = savedCards.filter((movie) => {
+        return (
+          movie.duration <= SHORT_MOVIE_DURATION &&
+          movie.nameRU.toLowerCase().includes(searchBar.toLowerCase())
+        );
+      });
+      setFoundSavedMovies(shortMovie);
+    } else {
+      const foundSavedMovie = savedCards.filter((movie) => {
+        return movie.nameRU.toLowerCase().includes(searchBar.toLowerCase());
+      });
+      return setFoundSavedMovies(foundSavedMovie);
+      
+    }
+  }
     
     function handleCheckboxSavedCards() {
         setCheckboxSavedCards(!checkboxSavedCards);
@@ -151,12 +200,9 @@ function App() {
               history.push('/signin');
             }
           })
-          .catch((err) => {
-            if (err === 400) {
-              console.log(`400 - некорректно заполнено одно из полей`);
-              setAuthSuccess(false)
-            }
-          });
+          .catch((err) => {console.log(`${err}`)}
+          )
+          setAuthSuccess(false);
       }
 
     const handleLogin = (email, password) => {
@@ -169,18 +215,12 @@ function App() {
           });
           setLoggedIn(true);
           localStorage.setItem('token', data.token)
-          history.push('/profile');
+          history.push('/movies');
         }
       })
-      .catch((err) => {
-        if (err === 401) {
-          console.log(`401 - пользователь с email не найден`);
-        }
-        if (err === 400) {
-          console.log(`400 - не передано одно из полей `);
-        }
-        setAuthSuccess(false)
-      });
+      .catch((err) => {console.log(`${err}`)}
+      );
+      setAuthSuccess(false)
   }
 
   const handleUpdateUser = (userInfo) => {
@@ -188,7 +228,7 @@ function App() {
     .then((newUser) => {
         setCurrentUser(newUser);
     })
-    .catch(err => console.log(`${err}`))
+    .catch((err) => console.log(`${err}`))
   }
 
   const onSignOut = () => {
@@ -217,6 +257,10 @@ function App() {
       .catch(err => console.log(`${err}`));
   }
 
+  function showSavedSearchedMovies() {
+    setIsSavedSearch(true);
+  }
+
   
 
     return (
@@ -232,9 +276,38 @@ function App() {
                 <Route path="/signin">
                     <Login handleLogin={handleLogin}/>
                 </Route>
-                <ProtectedRoute loggedIn={loggedIn} onCardLike={handleCardLike} onCheckbox={handleCheckboxCards} path="/movies" component={Movies} onNavigation={handleNavigationClick} cards={cards} loading={loading} onSubmit={handleMoviesSearch} filteredCards={filteredCards} />
+                <ProtectedRoute 
+                  loggedIn={loggedIn}
+                  onCardLike={handleCardLike}
+                  onCheckbox={handleCheckboxCards}
+                  path="/movies"
+                  component={Movies}
+                  onNavigation={handleNavigationClick}
+                  cards={cards}
+                  loading={loading}
+                  movieSearch={movieSearch}
+                  foundMovies={foundMovies}
+                  filteredCards={filteredCards}
+                  owner={currentUser._id}
+                  savedCards={savedCards}
+                  checkbox={checkboxCards} />
                 <ProtectedRoute loggedIn={loggedIn} onSignOut={onSignOut} onUpdateUser={handleUpdateUser} path="/profile" component={Profile} onNavigation={handleNavigationClick} name={userData.name} email={userData.email}/>
-                <ProtectedRoute loggedIn={loggedIn} onCardRemove={handleCardLike} onCheckbox={handleCheckboxSavedCards} path="/saved-movies" component={SavedMovies} onNavigation={handleNavigationClick} loading={loading} savedCards={savedCards}/>
+                <ProtectedRoute 
+                loggedIn={loggedIn}
+                onCardRemove={handleCardLike}
+                onCheckbox={handleCheckboxSavedCards}
+                path="/saved-movies"
+                component={SavedMovies}
+                onNavigation={handleNavigationClick}
+                loading={loading}
+                savedCards={savedCards}
+                showSavedSearchedMovies={showSavedSearchedMovies}
+                cards={savedMovies}
+                foundSavedMovies={foundSavedMovies}
+                isSavedMovies={isSavedMoviesState}
+                isSavedSearch={isSavedSearch}
+                savedMovies={savedMovies}
+                savedMovieSearch={savedMovieSearch} />
                 <Route>
                     <NotFound />
                 </Route>

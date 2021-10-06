@@ -1,12 +1,28 @@
 import './MoviesCardList.css';
 import MoviesCard from '../MoviesCard/MoviesCard';
 
-function MoviesCardList({cards, onCardLike}) {
+function MoviesCardList({ foundMovies, cards, countCards, onCardLike, onCardRemove, savedCards, owner, foundSavedMovies, isSavedMovies }) {
 
     return(
-        <section className="moviescardlist">
-            { cards.map(card => (<MoviesCard {...cards} key={card.id} card={card} onCardLike={onCardLike} />)) }
-        </section>
+        <>
+        {isSavedMovies ? (
+            <>
+            <section className="moviescardlist">
+                {foundSavedMovies.slice(0, countCards).map(card => (<MoviesCard {...cards} key={card.id} card={card} onCardRemove={onCardRemove} savedCards={savedCards} owner={owner} />)) }
+            </section>
+            </>
+        ) : (<>
+            {foundMovies.length > 0 ? (
+            <section className="moviescardlist">
+                {foundMovies.slice(0, countCards).map(card => (<MoviesCard {...cards} key={card.id} card={card} onCardLike={onCardLike} savedCards={savedCards} owner={owner} />)) }
+            </section>
+            ) : (
+            <section className="moviescardlist">
+                {cards.slice(0, countCards).map(card => (<MoviesCard {...cards} key={card.id} card={card} onCardLike={onCardLike} savedCards={savedCards} owner={owner} />)) }
+            </section>)}
+            </>
+        )}
+        </>
     );
 }
 

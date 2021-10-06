@@ -1,9 +1,9 @@
 import './ButtonMore.css';
 
-function ButtonMore() {
+function ButtonMore({ onClick }) {
 
     return (
-        <button className="link button buttonmore">Ещё</button>
+        <button onClick={onClick} className="link button buttonmore">Ещё</button>
     );
 }
 

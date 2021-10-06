@@ -7,50 +7,48 @@ import ButtonMore from '../Movies/ButtonMore/ButtonMore';
 import Preloader from '../Movies/Preloader/Preloader';
 import { useEffect, useState } from 'react';
 
-function Movies({ filteredCards = "", loading, errorQuery, emptyResult, emptyQuery,
-onSubmit, onCardLike, savedCards, owner, onCheckbox, checkbox, popupError, onNavigation, cards }) {
+function Movies({ foundMovies, loading, onSubmit, onCardLike, onNavigation, cards, savedCards, owner, filteredCards = "", errorQuery, emptyResult, emptyQuery,  onCheckbox, checkbox, popupError, movieSearch }) {
+  
+  const [countCards, setCountCards] = useState(setCountCard('init'));
 
-    function setCountCard(str) {
-        let initCountCards = 0;
-        let addCountCards = 0;
-        const pageWidth = document.documentElement.scrollWidth;
-    
-        if (pageWidth < 1280) {
-          initCountCards = 8;
-          addCountCards = 2;
-        } else {
-          initCountCards = 12;
-          addCountCards = 3;
-        };
-        if (pageWidth < 768) {
-          initCountCards = 5;
-          addCountCards = 2;
-        }
-        if (str === 'init') {
-          return initCountCards
-        } else {
-          return addCountCards
-        }
-      }
+  function setCountCard(str) {
+    let initCountCards = 0;
+    let addCountCards = 0;
+    const pageWidth = document.documentElement.scrollWidth;
 
-
-      useEffect(() => {
-        window.addEventListener('resize', setCountCard);
-      }, []);
-      
-      const [countCards, setCountCards] = useState(setCountCard('init'));
-    
-      function handleClick() {
-        setCountCards(countCards + setCountCard('add'));
-      }
-    
+    if (pageWidth < 1280) {
+      initCountCards = 8;
+      addCountCards = 2;
+    } else {
+      initCountCards = 12;
+      addCountCards = 3;
+    };
+    if (pageWidth < 768) {
+      initCountCards = 5;
+      addCountCards = 2;
+    }
+    if (str === 'init') {
+      return initCountCards
+    } else {
+      return addCountCards
+    }
+  }
+  
+  useEffect(() => {
+    setCountCard();
+    window.addEventListener("resize", setCountCard);
+  }, []);
+  
+  function handleClick() {
+    setCountCards(countCards + setCountCard('add'));
+  }
 
     return(
         <section className="movies">
                 <Header onNavigation={onNavigation}/>
-                <SearchForm onSubmit={onSubmit}/>
+                <SearchForm onSubmit={onSubmit} onCheckbox={onCheckbox} checkbox={checkbox} movieSearch={movieSearch} />
                 {loading && (<Preloader />)}
-                <MoviesCardList cards={cards} onCardLike={onCardLike}/>
+                <MoviesCardList cards={cards} onCardLike={onCardLike} foundMovies={foundMovies} countCards={countCards} savedCards={savedCards} owner={owner} />
                 <ButtonMore onClick={handleClick} />
                 <Footer />
         </section>

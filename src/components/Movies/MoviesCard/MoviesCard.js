@@ -1,15 +1,15 @@
 import React from 'react';
 import './MoviesCard.css';
 
-function MoviesCard({card, onCardLike}) {
+function MoviesCard({card, onCardLike, savedCards, owner}) {
     
-    const [isSavedMovie, setSavedMovie] = React.useState(false);
+    const isSavedMovie = savedCards.some((savedCard) => (savedCard.movieId ===
+    card.id && savedCard.owner === owner))
     const hour = ~~(card.duration / 60);
     const minute = (card.duration % 60);
     const time = `${hour === 0 ? "" : hour + 'ч '}${minute === 0 ? "" : minute + 'м'}`;
     
     const handleSavedMovie = () => {
-        setSavedMovie(true);
         onCardLike(card);
     }
     

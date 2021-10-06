@@ -57,7 +57,6 @@ class MainApi {
   }
 
   registerUser(name, email, password) {
-    console.log(name, email, password)
     return fetch(`${this._url}/signup`, {
       method: 'POST',
       headers: this.getHeader(),
@@ -80,21 +79,7 @@ class MainApi {
     });
   }
 
-  setLike(id) {
-    return fetch(`${this._url}/cards/${id}/likes`, {
-      method: "PUT",
-      headers: this.getHeader(),
-    }).then(this._getResponseData);
-  }
-
-  deleteLike(id) {
-    return fetch(`${this._url}/cards/${id}/likes`, {
-      method: "DELETE",
-      headers: this.getHeader(),
-    }).then(this._getResponseData);
-  }
-
-  addCard(movieCard, token) {
+  addMovieLike(movieCard, token) {
     return fetch(`${this._url}/movies`, {
       method: "POST",
       headers: {
@@ -105,9 +90,9 @@ class MainApi {
     }).then(this._getResponseData);
   }
   changeLikeCardStatus(movieCard, id, isLike, token) {
-    return isLike ? this.addCard(movieCard, token) : this.deleteCard(id, token)
+    return isLike ? this.addMovieLike(movieCard, token) : this.deleteMovieLike(id, token)
   }
-  deleteCard(id, token) {
+  deleteMovieLike(id, token) {
     return fetch(`${this._url}/movies/${id}`, {
       method: "DELETE",
       headers: {
@@ -133,7 +118,6 @@ class MainApi {
 const mainApi = new MainApi({
   url: "https://api.oops.nomoredomains.club",
   headers: {
-    //authorization: `8865dd26-fca5-4131-9c42-5dfb67b3f292`,
     "Content-Type": "application/json",
     'Accept': 'application/json'
   },
