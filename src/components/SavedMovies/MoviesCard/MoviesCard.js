@@ -19,7 +19,7 @@ function MoviesCard({card, onCardRemove}) {
                 </div>
                 <button onClick={handleClick} className="link button"><img className="moviescard__button" src={deleteButton} alt="Кнопка"></img></button>
             </div>
-            <img className="moviescard__img" src={card.image} alt={card.nameRU}></img>
+            <a className="link" href={card.trailer} target="_blank" rel="noreferrer"><img className="moviescard__img" src={card.image} alt={card.nameRU}></img></a>
         </div>
     );
 }

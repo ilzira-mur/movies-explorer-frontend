@@ -1,7 +1,7 @@
 import React from 'react';
 import './MoviesCard.css';
 
-function MoviesCard({card, onCardLike, savedCards, owner}) {
+function MoviesCard({ card, onCardLike, savedCards, owner }) {
     
     const isSavedMovie = savedCards.some((savedCard) => (savedCard.movieId ===
     card.id && savedCard.owner === owner))
@@ -22,7 +22,7 @@ function MoviesCard({card, onCardLike, savedCards, owner}) {
                 </div>
                 <button onClick={handleSavedMovie} className={`link button moviescard__button ${isSavedMovie ? "moviescard__button_active" : ""}`}></button>
             </div>
-            <img className="moviescard__img" src={card.image} alt={card.nameRU}></img>
+            <a className="link" href={card.trailer} target="_blank" rel="noreferrer"><img className="moviescard__img" src={card.image} alt={card.nameRU}></img></a>
         </div>
     );
 }

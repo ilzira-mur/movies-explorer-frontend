@@ -11,6 +11,7 @@ function Movies({ foundMovies, loading, onSubmit, onCardLike, onNavigation, card
   
   const [countCards, setCountCards] = useState(setCountCard('init'));
   const [shortMovies, setShortMovies] = useState([]);
+  const [more, setMore] = useState(true);
 
    
       useEffect(() => {
@@ -43,19 +44,31 @@ function Movies({ foundMovies, loading, onSubmit, onCardLike, onNavigation, card
   useEffect(() => {
     setCountCard();
     window.addEventListener("resize", setCountCard);
+    
+   
   }, []);
   
   function handleClick() {
     setCountCards(countCards + setCountCard('add'));
   }
 
+  const filteredCardListLength = checkbox ? shortMovies.length : filteredCards.length;
+  useEffect(() => {
+    countCards < filteredCardListLength ? setMore(true) : setMore(false);
+  }, [countCards, filteredCardListLength]);
+
+  useEffect(() => {
+    if (cards.length > countCards) {
+          setMore(true)
+        }
+  }, [cards, countCards])
     return(
         <section className="movies">
                 <Header onNavigation={onNavigation}/>
                 <SearchForm onSubmit={onSubmit} onCheckbox={onCheckbox} checkbox={checkbox} movieSearch={movieSearch} />
                 {loading && (<Preloader />)}
                 <MoviesCardList cards={checkbox ? cards : shortMovies} onCardLike={onCardLike} foundMovies={foundMovies} countCards={countCards} savedCards={savedCards} owner={owner} />
-                <ButtonMore onClick={handleClick} />
+                {more && (<ButtonMore onClick={handleClick} />)}
                 <Footer />
         </section>
     );

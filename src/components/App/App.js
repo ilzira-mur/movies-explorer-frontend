@@ -25,7 +25,6 @@ function App() {
     const [currentUser, setCurrentUser] = React.useState({});
     const [moviesCards, setMoviesCards] = useState([]);
     const [userData, setUserData] = useState({});
-    const [isAuthSuccess, setAuthSuccess] = React.useState(false);
     const [isShortMovies, setIsShortMovies] = React.useState(false);
     const [foundMovies, setFoundMovies] = React.useState([]);
     const [foundSavedMovies, setFoundSavedMovies] = React.useState([]);
@@ -79,49 +78,40 @@ function App() {
         }
   }, [loggedIn])
   
-
-  
-  const LS_CARDS = 'cards';
-  const LS_SAVED_CARDS = 'saved-cards';
-  const LS_FILTERED_CARDS = 'filtered-cards';
-  const LS_FILTERED_SAVED_CARDS = 'filtered-saved-cards';
-  const JWT = 'token';
-  const SHORT_MOVIE_DURATION = 40;
-  
   useEffect(() => {
     if (loggedIn) {
-      if (!localStorage.getItem(LS_SAVED_CARDS)) {
+      if (!localStorage.getItem('saved-cards')) {
         getSavedMovies();
       } else {
-        setSavedCards(JSON.parse(localStorage.getItem(LS_SAVED_CARDS)));
+        setSavedCards(JSON.parse(localStorage.getItem('saved-cards')));
       }
     }
   }, [currentUser, loggedIn]);
 
   function getSavedMovies() {
     mainApi
-      .getMoviesCard(localStorage.getItem(JWT))
+      .getMoviesCard(localStorage.getItem('token'))
       .then((cards) => {
         setSavedCards(cards);
-        localStorage.setItem(LS_SAVED_CARDS, JSON.stringify(cards));
+        localStorage.setItem('saved-cards', JSON.stringify(cards));
       })
       .catch((err) => {console.log(`${err}`)}
         );
   }
 
   useEffect(() => {
-    localStorage.getItem(LS_CARDS) && setCards(JSON.parse(localStorage.getItem(LS_CARDS)));
+    localStorage.getItem('cards') && setCards(JSON.parse(localStorage.getItem('cards')));
   }, []);
 
   useEffect(() => {
-    localStorage.getItem(LS_FILTERED_CARDS) && setFilteredCards(
-      JSON.parse(localStorage.getItem(LS_FILTERED_CARDS)));
-    localStorage.getItem(LS_FILTERED_SAVED_CARDS) && setFoundSavedMovies(
-      JSON.parse(localStorage.getItem(LS_FILTERED_SAVED_CARDS)));
+    localStorage.getItem('filtered-cards') && setFilteredCards(
+      JSON.parse(localStorage.getItem('filtered-cards')));
+    localStorage.getItem('filtered-saved-cards') && setFoundSavedMovies(
+      JSON.parse(localStorage.getItem('filtered-saved-cards')));
   }, []);
 
   useEffect(() => {
-    loggedIn && localStorage.setItem(LS_SAVED_CARDS, JSON.stringify(savedCards));
+    loggedIn && localStorage.setItem('saved-cards', JSON.stringify(savedCards));
   }, [savedCards, loggedIn]);
 
 
@@ -149,13 +139,14 @@ function App() {
     if (isShortMovies) {
       const shortMovie = cards.filter((movie) => {
         return (
-          movie.duration <= SHORT_MOVIE_DURATION &&
+          movie.duration <= 40 &&
           movie.nameRU.toLowerCase().includes(searchBar.toLowerCase())
         );
       });
       setFoundMovies(shortMovie);
     } else {
       const foundMovie = cards.filter((movie) => {
+        console.log(searchBar)
         return movie.nameRU.toLowerCase().includes(searchBar.toLowerCase());
       });
       return setFoundMovies(foundMovie);
@@ -166,7 +157,7 @@ function App() {
     if (isShortMovies) {
       const shortMovie = savedCards.filter((movie) => {
         return (
-          movie.duration <= SHORT_MOVIE_DURATION &&
+          movie.duration <= 40 &&
           movie.nameRU.toLowerCase().includes(searchBar.toLowerCase())
         );
       });
@@ -196,13 +187,11 @@ function App() {
                 email: data.email,
                 password: data.password
               });
-              setAuthSuccess(true)
               history.push('/signin');
             }
           })
           .catch((err) => {console.log(`${err}`)}
           )
-          setAuthSuccess(false);
       }
 
     const handleLogin = (email, password) => {
@@ -220,7 +209,6 @@ function App() {
       })
       .catch((err) => {console.log(`${err}`)}
       );
-      setAuthSuccess(false)
   }
 
   const handleUpdateUser = (userInfo) => {
@@ -277,38 +265,46 @@ function App() {
                     <Login handleLogin={handleLogin}/>
                 </Route>
                 <ProtectedRoute 
-                  loggedIn={loggedIn}
-                  onCardLike={handleCardLike}
-                  path="/movies"
-                  component={Movies}
-                  onNavigation={handleNavigationClick}
-                  cards={cards}
-                  loading={loading}
-                  movieSearch={movieSearch}
-                  foundMovies={foundMovies}
-                  filteredCards={filteredCards}
-                  owner={currentUser._id}
-                  savedCards={savedCards}
-                  onCheckbox={handleCheckboxCards}
-                  checkbox={checkboxCards} />
-                <ProtectedRoute loggedIn={loggedIn} onSignOut={onSignOut} onUpdateUser={handleUpdateUser} path="/profile" component={Profile} onNavigation={handleNavigationClick} name={userData.name} email={userData.email}/>
+                    loggedIn={loggedIn}
+                    onCardLike={handleCardLike}
+                    path="/movies"
+                    component={Movies}
+                    onNavigation={handleNavigationClick}
+                    cards={cards}
+                    loading={loading}
+                    movieSearch={movieSearch}
+                    foundMovies={foundMovies}
+                    filteredCards={filteredCards}
+                    owner={currentUser._id}
+                    savedCards={savedCards}
+                    onCheckbox={handleCheckboxCards}
+                    checkbox={checkboxCards} />
                 <ProtectedRoute 
-                  loggedIn={loggedIn}
-                  onCardRemove={handleCardLike}
-                  path="/saved-movies"
-                  component={SavedMovies}
-                  onNavigation={handleNavigationClick}
-                  loading={loading}
-                  savedCards={savedCards}
-                  showSavedSearchedMovies={showSavedSearchedMovies}
-                  cards={savedMovies}
-                  foundSavedMovies={foundSavedMovies}
-                  isSavedMovies={isSavedMoviesState}
-                  isSavedSearch={isSavedSearch}
-                  savedMovies={savedMovies}
-                  savedMovieSearch={savedMovieSearch}
-                  onCheckbox={handleCheckboxSavedCards}
-                  checkbox={checkboxSavedCards} />
+                    loggedIn={loggedIn}
+                    onSignOut={onSignOut}
+                    onUpdateUser={handleUpdateUser}
+                    path="/profile"
+                    component={Profile}
+                    onNavigation={handleNavigationClick}
+                    name={userData.name}
+                    email={userData.email}/>
+                <ProtectedRoute 
+                    loggedIn={loggedIn}
+                    onCardRemove={handleCardLike}
+                    path="/saved-movies"
+                    component={SavedMovies}
+                    onNavigation={handleNavigationClick}
+                    loading={loading}
+                    savedCards={savedCards}
+                    showSavedSearchedMovies={showSavedSearchedMovies}
+                    cards={savedMovies}
+                    foundSavedMovies={foundSavedMovies}
+                    isSavedMovies={isSavedMoviesState}
+                    isSavedSearch={isSavedSearch}
+                    savedMovies={savedMovies}
+                    savedMovieSearch={savedMovieSearch}
+                    onCheckbox={handleCheckboxSavedCards}
+                    checkbox={checkboxSavedCards} />
                 <Route>
                     <NotFound />
                 </Route>
