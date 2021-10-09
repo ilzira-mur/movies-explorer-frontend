@@ -3,7 +3,7 @@ import './SearchForm.css';
 import FilterCheckbox from '../SearchForm/FilterCheckbox/FilterCheckbox';
 import SearchformButton from '../../../images/searchform__button.svg';
 
-function SearchForm({ isSavedMovies, showSavedSearchedMovies, savedMovieSearch, onSubmit, onCheckbox, checkbox, onSearch }) {
+function SearchForm({ isSavedMovies, showSavedSearchedMovies, savedMovieSearch, onCheckbox, checkbox, onSearch }) {
     
     const [movieName, setMovieName] = React.useState([]);
     const [savedMovieName, setSavedMovieName] = React.useState([]);

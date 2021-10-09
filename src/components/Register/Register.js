@@ -21,22 +21,22 @@ function Register({ handleRegister, errorFromApi, setErrorFromApi }) {
   }, [setErrorFromApi])
   
   const handleChangeName = (e) => {
-    setName(e.target.value);
     const target = e.target;
+    setName(target.value);
     setErrorName(target.validationMessage);
     setIsValidName(target.checkValidity())
   }
     
   const handleChangeEmail = (e) => {
-    setEmail(e.target.value)
     const target = e.target;
+    setEmail(target.value)
     setErrorEmail(target.validationMessage);
     setIsValidEmail(target.checkValidity());
   }
 
   const handleChangePassword = (e) => {
-    setPassword(e.target.value)
     const target = e.target;
+    setPassword(target.value)
     setErrorPassword(target.validationMessage);
     setIsValidPassword(target.checkValidity());
   }
