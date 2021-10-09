@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import './SavedMovies.css';
 import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
@@ -7,34 +7,36 @@ import MoviesCardList from "./MoviesCardList/MoviesCardList";
 import Preloader from '../Movies/Preloader/Preloader';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 
-function SavedMovies({onNavigation, loading, savedCards, filteredSavedCards = "", errorQuery,
-emptyResult, emptyQuery, onSubmit, onCardRemove, onCheckbox, checkbox, savedMovieSearch, isSavedMovies,
-showSavedSearchedMovies, isSavedSearch, foundSavedMovies }) {
+function SavedMovies({ onNavigation, loading, savedCards, onSubmit, onCardRemove, onCheckbox, checkbox, savedMovieSearch,
+showSavedSearchedMovies, isSavedMovies, foundSavedMovies }) {
 
 
     const currentUser = useContext(CurrentUserContext);
-    const [shortSavedMovies, setShortSavedMovies] = useState([]);
+    const [shortSavedMovies, setShortSavedMovies] = React.useState([]);
 
     function checkOwnerCardList() {
         return savedCards.some(item => item.owner === currentUser._id)
-      }
-      useEffect(() => {
+    }
+
+    useEffect(() => {
         setShortSavedMovies(savedCards.filter(card => card.duration <= 40));
-      }, [savedCards]);
+    }, [savedCards]);
     
+    
+
     return (
         <section className="saved-movies">
             <Header onNavigation={onNavigation}/>
-            <SearchForm isSavedSearch={isSavedSearch} onSubmit={onSubmit} savedMovieSearch={savedMovieSearch} isSavedMovies={isSavedMovies}
+            <SearchForm onSubmit={onSubmit} savedMovieSearch={savedMovieSearch} isSavedMovies={isSavedMovies}
             showSavedSearchedMovies={showSavedSearchedMovies} onCheckbox={onCheckbox} checkbox={checkbox}/>
             {loading && (<Preloader />)}
             {checkOwnerCardList() ? foundSavedMovies.length ?
-            (<MoviesCardList isSavedSearch={isSavedSearch}  owner={currentUser._id}
-                savedCards={checkbox ? foundSavedMovies : shortSavedMovies} onCardRemove={onCardRemove} foundSavedMovies={foundSavedMovies} isSavedMovies={isSavedMovies}/>)
+            (<MoviesCardList owner={currentUser._id}
+                savedCards={checkbox ? shortSavedMovies : foundSavedMovies} onCardRemove={onCardRemove} foundSavedMovies={foundSavedMovies} isSavedMovies={isSavedMovies}/>)
             :
             (<MoviesCardList
                 owner={currentUser._id}
-                savedCards={checkbox ? savedCards : shortSavedMovies} onCardRemove={onCardRemove} foundSavedMovies={foundSavedMovies} isSavedMovies={isSavedMovies} />)
+                savedCards={checkbox ? shortSavedMovies : savedCards} onCardRemove={onCardRemove} foundSavedMovies={foundSavedMovies} isSavedMovies={isSavedMovies} />)
                 : ''
             }
             <Footer />

@@ -5,69 +5,68 @@ import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
 import ButtonMore from '../Movies/ButtonMore/ButtonMore';
 import Preloader from '../Movies/Preloader/Preloader';
-import { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 
-function Movies({ foundMovies, loading, onSubmit, onCardLike, onNavigation, cards, savedCards, owner, filteredCards = "", errorQuery, emptyResult, emptyQuery,  onCheckbox, checkbox, popupError, movieSearch }) {
+function Movies({ foundMovies, loading, onSubmit, onCardLike, onNavigation, cards, savedCards, owner, onCheckbox, checkbox, onSearch }) {
   
-  const [countCards, setCountCards] = useState(setCountCard('init'));
-  const [shortMovies, setShortMovies] = useState([]);
-  const [more, setMore] = useState(true);
+  const [widthCards, setWidthCards] = React.useState(setWidthCard('init'));
+  const [shortMovies, setShortMovies] = React.useState([]);
+  const [more, setMore] = React.useState(true);
 
-   
-      useEffect(() => {
-        setShortMovies(cards.filter(card => card.duration <= 40));
-      }, [cards]);
+  useEffect(() => {
+    setShortMovies(cards.filter(card => card.duration <= 40));
+  }, [cards]);
 
-  function setCountCard(str) {
-    let initCountCards = 0;
-    let addCountCards = 0;
+  function setWidthCard(str) {
+    let initWidthCards = 0;
+    let addWidthCards = 0;
     const pageWidth = document.documentElement.scrollWidth;
 
-    if (pageWidth < 1280) {
-      initCountCards = 8;
-      addCountCards = 2;
+    if (pageWidth > 768) {
+      initWidthCards = 12;
+      addWidthCards = 3;
     } else {
-      initCountCards = 12;
-      addCountCards = 3;
+      initWidthCards = 8;
+      addWidthCards = 2;
     };
     if (pageWidth < 768) {
-      initCountCards = 5;
-      addCountCards = 2;
+      initWidthCards = 5;
+      addWidthCards = 1;
     }
     if (str === 'init') {
-      return initCountCards
+      return initWidthCards
     } else {
-      return addCountCards
+      return addWidthCards
     }
   }
   
   useEffect(() => {
-    setCountCard();
-    window.addEventListener("resize", setCountCard);
-    
-   
+    setWidthCard();
+    window.addEventListener("resize", setWidthCard);
   }, []);
   
   function handleClick() {
-    setCountCards(countCards + setCountCard('add'));
+    setWidthCards(widthCards + setWidthCard('add'));
   }
 
-  const filteredCardListLength = checkbox ? shortMovies.length : filteredCards.length;
-  useEffect(() => {
-    countCards < filteredCardListLength ? setMore(true) : setMore(false);
-  }, [countCards, filteredCardListLength]);
+  const foundCardListLength = checkbox ? shortMovies.length : foundMovies.length;
 
   useEffect(() => {
-    if (cards.length > countCards) {
+    widthCards < foundCardListLength ? setMore(true) : setMore(false);
+  }, [widthCards, foundCardListLength]);
+
+  useEffect(() => {
+    if (cards.length > widthCards) {
           setMore(true)
         }
-  }, [cards, countCards])
+  }, [loading, cards, widthCards])
+  
     return(
         <section className="movies">
                 <Header onNavigation={onNavigation}/>
-                <SearchForm onSubmit={onSubmit} onCheckbox={onCheckbox} checkbox={checkbox} movieSearch={movieSearch} />
+                <SearchForm onSubmit={onSubmit} onCheckbox={onCheckbox} checkbox={checkbox} onSearch={onSearch} />
                 {loading && (<Preloader />)}
-                <MoviesCardList cards={checkbox ? cards : shortMovies} onCardLike={onCardLike} foundMovies={foundMovies} countCards={countCards} savedCards={savedCards} owner={owner} />
+                <MoviesCardList cards={checkbox ? shortMovies : cards} onCardLike={onCardLike} foundMovies={foundMovies} widthCards={widthCards} savedCards={savedCards} owner={owner} />
                 {more && (<ButtonMore onClick={handleClick} />)}
                 <Footer />
         </section>

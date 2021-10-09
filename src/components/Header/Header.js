@@ -45,13 +45,29 @@ function Header({ loggedIn, onNavigation }) {
                 
                     <Switch>
                         <Route exact path="/">
-                            {!loggedIn && (
+                            {!loggedIn ? (
                             <>
                                 <div className="header__login">
                                 <Link className="link" to="/signup"><p className="header__sign-up">Регистрация</p></Link>
                                 <Link className="link" to="/signin"><button type="submit" name="button" className="button header__button">Войти</button></Link>
                                 </div>
                             </>
+                            ) : (
+                             <>
+                                <div className="header__films">
+                                <Link className="link" to="/movies"><p className="link header__sign-up">Фильмы</p></Link>
+                                <Link className="link" to="/saved-movies"><p className="link header__sign-up header__sign-up_type_font">Сохранённые фильмы</p></Link>
+                                </div>
+                                <div className="header__login">
+                                <img className="link button header__menu" onClick={onNavigation} src={menu} alt="Меню"/>
+                                <Link className="link" to="/profile">
+                                    <div className="header__account">
+                                        <p className="link header__sign-up header__sign-up_type_account">Аккаунт</p>
+                                        <img src={icon} alt="Аккаунт"/>
+                                    </div>
+                                </Link>
+                                </div>
+                             </>   
                             )}
                         </Route>
                         <Route path="/movies">

@@ -18,26 +18,6 @@ class MainApi {
     } return Promise.reject(`Произошла ошибка - ${res.status}`);
   }
 
-    getInitialCards() {
-        return fetch(`${this._url}/cards`, {
-            method: 'GET',
-            headers: this.getHeader(),
-        }).then(this._getResponseData);
-    }
-
-    addNewCard(data) {
-    return fetch(`${this._url}/cards`, {
-        method: 'POST',
-        headers: this.getHeader(),
-        body: JSON.stringify({
-          name: data.name,
-          link: data.link
-        })
-      }).then(this._getResponseData);
-  }
-
-
-
   getUserInfo() {
     return fetch(`${this._url}/users/me`, {
         method: 'GET',

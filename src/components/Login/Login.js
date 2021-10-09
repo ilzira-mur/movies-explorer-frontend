@@ -1,23 +1,40 @@
-import React, { useState } from 'react';
+import React from 'react';
 import '../Register/Register.css';
 import logo from '../../images/logo_main.svg';
 import { Link } from 'react-router-dom';
+import { useEffect } from 'react';
 
-function Login({ handleLogin }) {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('')
+function Login({ handleLogin, errorFromApi, setErrorFromApi }) {
+  const [email, setEmail] = React.useState('');
+  const [password, setPassword] = React.useState('');
+  const [errorEmail, setErrorEmail] = React.useState('');
+  const [errorPasword, setErrorPassword] = React.useState('');
+  const [isValidEmail, setIsValidEmail] = React.useState(false);
+  const [isValidPassword, setIsValidPassword] = React.useState(false);
+
+  useEffect(() => {
+    setErrorFromApi('')
+  }, [setErrorFromApi])
   
   const handleChangeEmail = (e) => {
-      setEmail(e.target.value)
+    const target = e.target;
+    setEmail(target.value);
+    setErrorEmail(target.validationMessage);
+    setIsValidEmail(target.checkValidity())
   }
 
   const handleChangePassword = (e) => {
-    setPassword(e.target.value)
+    const target = e.target;
+    setPassword(target.value);
+    setErrorPassword(target.validationMessage);
+    setIsValidPassword(target.checkValidity());
   }
   function handleSubmit(e) {
     e.preventDefault();
     handleLogin(email, password);
   }
+
+  const buttonClassName = `${(isValidEmail && isValidPassword === true) ? "register__button" : "register__button_disable"}`;
 
     return (
         <section className="register">
@@ -28,11 +45,13 @@ function Login({ handleLogin }) {
                   </div>
                   <form onSubmit={handleSubmit} className="register__form">
                     <p className="register__name">E-mail</p>
-                    <input onChange={handleChangeEmail} className="register__input" type="email" placeholder="" required></input>
+                    <input value={email} onChange={handleChangeEmail} className="register__input" type="email" placeholder="" required></input>
+                    <span className="register__error">{errorEmail}</span>
                     <p className="register__name">Пароль</p>
-                    <input onChange={handleChangePassword} className="register__input" type="password" placeholder="" required></input>
-                    <span className="register__error"></span>
-                    <button className="link button register__button">Войти</button>
+                    <input value={password} onChange={handleChangePassword} className="register__input" type="password" placeholder="" required></input>
+                    <span className="register__error">{errorPasword}</span>
+                    <button className={buttonClassName}>Войти</button>
+                    <span className="register__error">{errorFromApi}</span>
                   </form>
                   <div className="register__signin">
                       <p className="register__text">Ещё не зарегистрированы?</p>

@@ -1,12 +1,12 @@
-import { useState } from 'react';
+import React from 'react';
 import './SearchForm.css';
 import FilterCheckbox from '../SearchForm/FilterCheckbox/FilterCheckbox';
 import SearchformButton from '../../../images/searchform__button.svg';
 
-function SearchForm({ isSavedMovies, showSavedSearchedMovies, savedMovieSearch, onSubmit, onCheckbox, checkbox, movieSearch }) {
+function SearchForm({ isSavedMovies, showSavedSearchedMovies, savedMovieSearch, onSubmit, onCheckbox, checkbox, onSearch }) {
     
-    const [movieName, setMovieName] = useState([]);
-    const [savedMovieName, setSavedMovieName] = useState([]);
+    const [movieName, setMovieName] = React.useState([]);
+    const [savedMovieName, setSavedMovieName] = React.useState([]);
     
 
     function handleMovieNameChange(evt) {
@@ -19,7 +19,7 @@ function SearchForm({ isSavedMovies, showSavedSearchedMovies, savedMovieSearch, 
     
     function handleSubmit(evt) {
         evt.preventDefault();
-        movieSearch(movieName);
+        onSearch(movieName);
     }
 
     function handleSavedSubmit(evt) {

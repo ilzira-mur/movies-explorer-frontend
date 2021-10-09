@@ -74,7 +74,7 @@
 }
 
 .register__input:last-of-type {
-    margin-bottom: 83px;
+    margin-bottom: 0;
 }
 
 .register__button {
@@ -85,7 +85,7 @@
     border-radius: 3px;
     margin-left: auto;
     margin-right: auto;
-    margin-top: 69px;
+    margin-top: 152px;
     font-family: 'Inter', Arial, sans-serif;
     font-size: 14px;
     font-style: normal;
@@ -94,6 +94,41 @@
     letter-spacing: 0em;
     text-align: center;
     color: #FFF;
+    text-decoration: none;
+    cursor: pointer;
+    display: block;
+    padding: 0;
+    cursor: pointer;
+    border: none;
+}
+
+.register__button:hover {
+    transition: 0.1s linear;
+    opacity: 0.7;
+  }
+
+.register__button_disable {
+    background-color: #F8F8F8;
+    max-width: 396px;
+    width: 100%;
+    height: 45px;
+    border-radius: 3px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 152px;
+    font-family: 'Inter', Arial, sans-serif;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 17px;
+    letter-spacing: 0em;
+    text-align: center;
+    color: #C2C2C2;
+    text-decoration: none;
+    cursor: pointer;
+    display: block;
+    padding: 0;
+    border: none;
 }
 
 .register__signin {
