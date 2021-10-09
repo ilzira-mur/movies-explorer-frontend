@@ -29,6 +29,7 @@ function App() {
     const [checkboxCards, setCheckboxCards] = React.useState(false);
     const [errorFromApi, setErrorFromApi] = React.useState('');
     const [isSavedMovies, setIsSavedMovies] = React.useState(true);
+    const [isSearching, setIsSearching] = React.useState(false);
     const imageUrl = "https://api.nomoreparties.co";
     const history = useHistory();
     
@@ -64,6 +65,38 @@ function App() {
         });
         }
     }, [loggedIn])
+
+    useEffect(() => {
+      if (loggedIn) {
+        if (!localStorage.getItem('saved-cards')) {
+          getSavedMovies();
+        } else {
+          setSavedCards(JSON.parse(localStorage.getItem('saved-cards')));
+        }
+      }
+    }, [currentUser, loggedIn]);
+
+    const getSavedMovies = () => {
+      mainApi
+        .getMoviesCard(localStorage.getItem('token'))
+        .then((cards) => {
+          setSavedCards(cards);
+          localStorage.setItem('saved-cards', JSON.stringify(cards));
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+
+    useEffect(() => {
+      localStorage.getItem('cards') && setCards(JSON.parse(localStorage.getItem('cards')));
+      localStorage.getItem('found-cards') && setFoundMovies(JSON.parse(localStorage.getItem('found-cards')));
+      localStorage.getItem('found-saved-cards') && setFoundSavedMovies(JSON.parse(localStorage.getItem('found-saved-cards')));
+    }, []);
+    
+    useEffect(() => {
+      loggedIn && localStorage.setItem('saved-cards', JSON.stringify(savedCards));
+    }, [savedCards, loggedIn]);
 
     const handleRegister = (name, email, password) => {
       setErrorFromApi('');
@@ -196,6 +229,7 @@ function App() {
         .then((likeMovie) => {
           setFoundMovies((state) => state.map((c) => (c.id === card.id ? card : c)));
           !isLiked ? setSavedCards([...savedCards, likeMovie]) : setSavedCards((state) => state.filter((c) => c.movieId !== card.movieId));
+          console.log(card)
         })
         .catch(err => console.log(`${err}`));
     }
@@ -218,6 +252,13 @@ function App() {
       
     const handleCheckboxCards = () => {
         setCheckboxCards(!checkboxCards);
+    }
+
+    const startPreloader = () => {
+      setIsSearching(true);
+      setTimeout(async () => {
+        setIsSearching(false);
+      }, 100);
     }
 
     return (
@@ -246,7 +287,10 @@ function App() {
                     owner={currentUser._id}
                     savedCards={savedCards}
                     onCheckbox={handleCheckboxCards}
-                    checkbox={checkboxCards} />
+                    checkbox={checkboxCards}
+                    startPreloader={startPreloader}
+                    setIsSearching={setIsSearching}
+                    isSearching={isSearching} />
                 <ProtectedRoute 
                     loggedIn={loggedIn}
                     onSignOut={onSignOut}

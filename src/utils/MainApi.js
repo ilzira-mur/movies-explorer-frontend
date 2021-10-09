@@ -18,6 +18,15 @@ class MainApi {
     } return Promise.reject(`Произошла ошибка - ${res.status}`);
   }
 
+  getMoviesCard(token) {
+    return fetch(`${this._baseUrl}/movies`, {
+      headers: {
+        'Content-Type': 'application/json',
+        'authorization': `Bearer ${token}`
+      }
+    }).then(this._getResponseData);
+  }
+
   getUserInfo() {
     return fetch(`${this._url}/users/me`, {
         method: 'GET',

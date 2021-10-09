@@ -3,7 +3,7 @@ import './SearchForm.css';
 import FilterCheckbox from '../SearchForm/FilterCheckbox/FilterCheckbox';
 import SearchformButton from '../../../images/searchform__button.svg';
 
-function SearchForm({ isSavedMovies, showSavedSearchedMovies, savedMovieSearch, onCheckbox, checkbox, onSearch }) {
+function SearchForm({ isSavedMovies, showSavedSearchedMovies, savedMovieSearch, onCheckbox, checkbox, onSearch, startPreloader }) {
     
     const [movieName, setMovieName] = React.useState([]);
     const [savedMovieName, setSavedMovieName] = React.useState([]);
@@ -19,6 +19,7 @@ function SearchForm({ isSavedMovies, showSavedSearchedMovies, savedMovieSearch, 
     
     function handleSubmit(evt) {
         evt.preventDefault();
+        startPreloader();
         onSearch(movieName);
     }
 

@@ -14,7 +14,7 @@ showSavedSearchedMovies, isSavedMovies, foundSavedMovies }) {
     const currentUser = useContext(CurrentUserContext);
     const [shortSavedMovies, setShortSavedMovies] = React.useState([]);
 
-    function checkOwnerCardList() {
+    function checkOwnerMovieList() {
         return savedCards.some(item => item.owner === currentUser._id)
     }
 
@@ -30,13 +30,13 @@ showSavedSearchedMovies, isSavedMovies, foundSavedMovies }) {
             <SearchForm onSubmit={onSubmit} savedMovieSearch={savedMovieSearch} isSavedMovies={isSavedMovies}
             showSavedSearchedMovies={showSavedSearchedMovies} onCheckbox={onCheckbox} checkbox={checkbox}/>
             {loading && (<Preloader />)}
-            {checkOwnerCardList() ? foundSavedMovies.length ?
+            {checkOwnerMovieList() ? foundSavedMovies.length ?
             (<MoviesCardList owner={currentUser._id}
-                savedCards={checkbox ? shortSavedMovies : foundSavedMovies} onCardRemove={onCardRemove} foundSavedMovies={foundSavedMovies} isSavedMovies={isSavedMovies}/>)
+                savedCards={checkbox ? shortSavedMovies : foundSavedMovies} onCardRemove={onCardRemove} foundSavedMovies={foundSavedMovies} />)
             :
             (<MoviesCardList
                 owner={currentUser._id}
-                savedCards={checkbox ? shortSavedMovies : savedCards} onCardRemove={onCardRemove} foundSavedMovies={foundSavedMovies} isSavedMovies={isSavedMovies} />)
+                savedCards={checkbox ? shortSavedMovies : savedCards} onCardRemove={onCardRemove} foundSavedMovies={foundSavedMovies} />)
                 : ''
             }
             <Footer />

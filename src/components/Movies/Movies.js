@@ -7,7 +7,7 @@ import ButtonMore from '../Movies/ButtonMore/ButtonMore';
 import Preloader from '../Movies/Preloader/Preloader';
 import React, { useEffect } from 'react';
 
-function Movies({ foundMovies, loading, onSubmit, onCardLike, onNavigation, cards, savedCards, owner, onCheckbox, checkbox, onSearch }) {
+function Movies({ foundMovies, loading, onSubmit, onCardLike, onNavigation, cards, savedCards, owner, onCheckbox, checkbox, onSearch, startPreloader, isSavedMovies }) {
   
   const [widthCards, setWidthCards] = React.useState(setWidthCard('init'));
   const [shortMovies, setShortMovies] = React.useState([]);
@@ -49,24 +49,28 @@ function Movies({ foundMovies, loading, onSubmit, onCardLike, onNavigation, card
     setWidthCards(widthCards + setWidthCard('add'));
   }
 
-  const foundCardListLength = checkbox ? shortMovies.length : foundMovies.length;
+  useEffect(() => {
+    if (foundMovies.length < widthCards)
+        setMore(false);
+  }, [more, widthCards, foundMovies.length]);
 
   useEffect(() => {
-    widthCards < foundCardListLength ? setMore(true) : setMore(false);
-  }, [widthCards, foundCardListLength]);
+    if (shortMovies.length < widthCards)
+        setMore(false);
+  }, [widthCards, shortMovies.length]);
 
   useEffect(() => {
     if (cards.length > widthCards) {
           setMore(true)
         }
-  }, [loading, cards, widthCards])
+  }, [cards, widthCards])
   
     return(
         <section className="movies">
                 <Header onNavigation={onNavigation}/>
-                <SearchForm onSubmit={onSubmit} onCheckbox={onCheckbox} checkbox={checkbox} onSearch={onSearch} />
+                <SearchForm onSubmit={onSubmit} onCheckbox={onCheckbox} checkbox={checkbox} onSearch={onSearch} startPreloader={startPreloader} />
                 {loading && (<Preloader />)}
-                <MoviesCardList cards={checkbox ? shortMovies : cards} onCardLike={onCardLike} foundMovies={foundMovies} widthCards={widthCards} savedCards={savedCards} owner={owner} />
+                <MoviesCardList isSavedMovies={isSavedMovies} cards={checkbox ? shortMovies : cards} onCardLike={onCardLike} foundMovies={foundMovies} widthCards={widthCards} savedCards={savedCards} owner={owner} />
                 {more && (<ButtonMore onClick={handleClick} />)}
                 <Footer />
         </section>
