@@ -10,6 +10,17 @@
     margin-right: auto;
 }
 
+.moviescardlist__text {
+    color: #EE3465;
+    font-family: 'Inter', Arial, sans-serif;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 29px;
+    letter-spacing: 0em;
+    text-align: center;
+}
+
 @media screen and (max-width: 768px) {
     .moviescardlist {
         grid-template-columns: repeat(2, 1fr);

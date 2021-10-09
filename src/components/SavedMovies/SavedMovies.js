@@ -4,10 +4,9 @@ import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
 import SearchForm from '../Movies/SearchForm/SearchForm';
 import MoviesCardList from "./MoviesCardList/MoviesCardList";
-import Preloader from '../Movies/Preloader/Preloader';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 
-function SavedMovies({ onNavigation, loading, savedCards, onSubmit, onCardRemove, onCheckbox, checkbox, savedMovieSearch,
+function SavedMovies({ onNavigation, savedCards, onSubmit, onCardRemove, onCheckbox, checkbox, savedMovieSearch,
 showSavedSearchedMovies, isSavedMovies, foundSavedMovies }) {
 
 
@@ -26,10 +25,9 @@ showSavedSearchedMovies, isSavedMovies, foundSavedMovies }) {
 
     return (
         <section className="saved-movies">
-            <Header onNavigation={onNavigation}/>
+            <Header onNavigation={onNavigation} />
             <SearchForm onSubmit={onSubmit} savedMovieSearch={savedMovieSearch} isSavedMovies={isSavedMovies}
-            showSavedSearchedMovies={showSavedSearchedMovies} onCheckbox={onCheckbox} checkbox={checkbox}/>
-            {loading && (<Preloader />)}
+            showSavedSearchedMovies={showSavedSearchedMovies} onCheckbox={onCheckbox} checkbox={checkbox} />
             {checkOwnerMovieList() ? foundSavedMovies.length ?
             (<MoviesCardList owner={currentUser._id}
                 savedCards={checkbox ? shortSavedMovies : foundSavedMovies} onCardRemove={onCardRemove} foundSavedMovies={foundSavedMovies} />)

@@ -13,7 +13,7 @@ function Login({ handleLogin, errorFromApi, setErrorFromApi }) {
   const [isValidPassword, setIsValidPassword] = React.useState(false);
 
   useEffect(() => {
-    setErrorFromApi('')
+    setErrorFromApi('');
   }, [setErrorFromApi])
   
   const handleChangeEmail = (e) => {

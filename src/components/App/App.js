@@ -20,7 +20,6 @@ function App() {
     const [isNavigationOpen, setNavigationOpen] = React.useState(false);
     const [cards, setCards] = React.useState([]);
     const [savedCards, setSavedCards] = React.useState([]);
-    const [loading, setLoading] = React.useState(false);
     const [currentUser, setCurrentUser] = React.useState({});
     const [userData, setUserData] = React.useState({});
     const [foundMovies, setFoundMovies] = React.useState([]);
@@ -28,7 +27,9 @@ function App() {
     const [checkboxSavedCards, setCheckboxSavedCards] = React.useState(false);
     const [checkboxCards, setCheckboxCards] = React.useState(false);
     const [errorFromApi, setErrorFromApi] = React.useState('');
+    const [isMoviesErrorFromApi, setIsMoviesErrorFromApi] = React.useState(false);
     const [isSavedMovies, setIsSavedMovies] = React.useState(true);
+    const [isSearchMovies, setIsSearchMovies] = React.useState(false);
     const [isSearching, setIsSearching] = React.useState(false);
     const imageUrl = "https://api.nomoreparties.co";
     const history = useHistory();
@@ -52,7 +53,6 @@ function App() {
     }, [history]);
 
     useEffect(()=>{
-      setLoading(true)
       if (loggedIn) {
         Promise.all([
           mainApi.getUserInfo()])
@@ -61,7 +61,6 @@ function App() {
         })
         .catch(err => console.log(`${err}`))
         .finally(() => {
-          setLoading(false);
         });
         }
     }, [loggedIn])
@@ -164,9 +163,8 @@ function App() {
 
     const handleMovieSearch = (query) => {
       let changeMovieCards;
-      setLoading(true);
+      setIsSearching(true);
       if (!localStorage.getItem('cards')) {
-        setLoading(true);
         moviesApi
           .getMoviesCard()
           .then((cards) => {
@@ -174,15 +172,16 @@ function App() {
             setCards(changeMovieCards);
             localStorage.setItem('cards', JSON.stringify(changeMovieCards));
             setFoundMovies(movieSearch(query));
-            setLoading(false);
+            setIsSearching(false);
           })
-          .catch(() => {
-            setLoading(false);
-          });
+          .catch((err) => {
+            console.log(`${err}`);
+            setIsMoviesErrorFromApi(true);
+          })
       } else {
         setCards(JSON.parse(localStorage.getItem('cards')));
-        setLoading(false);
         setFoundMovies(movieSearch(query));
+        setIsSearching(false);
       }
     }
 
@@ -229,13 +228,16 @@ function App() {
         .then((likeMovie) => {
           setFoundMovies((state) => state.map((c) => (c.id === card.id ? card : c)));
           !isLiked ? setSavedCards([...savedCards, likeMovie]) : setSavedCards((state) => state.filter((c) => c.movieId !== card.movieId));
-          console.log(card)
         })
         .catch(err => console.log(`${err}`));
     }
 
     const showSavedSearchedMovies = () => {
       setIsSavedMovies(true);
+    }
+
+    const showSearchMovies = () => {
+      setIsSearchMovies(true);
     }
 
     const handleNavigationClick = () => {
@@ -281,16 +283,18 @@ function App() {
                     component={Movies}
                     onNavigation={handleNavigationClick}
                     cards={cards}
-                    loading={loading}
+                    isSearching={isSearching}
                     onSearch={handleMovieSearch}
                     foundMovies={foundMovies}
                     owner={currentUser._id}
                     savedCards={savedCards}
+                    showSearchMovies={showSearchMovies}
+                    isSearchMovies={isSearchMovies}
                     onCheckbox={handleCheckboxCards}
                     checkbox={checkboxCards}
                     startPreloader={startPreloader}
                     setIsSearching={setIsSearching}
-                    isSearching={isSearching} />
+                    isMoviesErrorFromApi={isMoviesErrorFromApi} />
                 <ProtectedRoute 
                     loggedIn={loggedIn}
                     onSignOut={onSignOut}
@@ -306,7 +310,6 @@ function App() {
                     path="/saved-movies"
                     component={SavedMovies}
                     onNavigation={handleNavigationClick}
-                    loading={loading}
                     savedCards={savedCards}
                     showSavedSearchedMovies={showSavedSearchedMovies}
                     foundSavedMovies={foundSavedMovies}
