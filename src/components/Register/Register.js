@@ -1,10 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './Register.css';
 import logo from '../../images/logo_main.svg';
 import { Link } from 'react-router-dom';
-import { useEffect } from 'react/cjs/react.development';
 
-function Register({ handleRegister, errorFromApi, setErrorFromApi }) {
+function Register({ handleRegister, errorFromApi, isErrorLoginFromApi, setErrorFromApi }) {
 
   const [name, setName] = React.useState('');
   const [email, setEmail] = React.useState('');
@@ -15,10 +14,6 @@ function Register({ handleRegister, errorFromApi, setErrorFromApi }) {
   const [isValidName, setIsValidName] = React.useState(false);
   const [isValidEmail, setIsValidEmail] = React.useState(false);
   const [isValidPassword, setIsValidPassword] = React.useState(false);
-
-  useEffect(() => {
-    setErrorFromApi('')
-  }, [setErrorFromApi])
   
   const handleChangeName = (e) => {
     const target = e.target;
@@ -46,6 +41,10 @@ function Register({ handleRegister, errorFromApi, setErrorFromApi }) {
     handleRegister(name, email, password);
   }
 
+  useEffect(() => {
+    setErrorFromApi('')
+  }, [setErrorFromApi])
+
   const buttonClassName = `${(isValidName && isValidEmail && isValidPassword === true) ? "register__button" : "register__button_disable"}`;
 
       return (
@@ -57,16 +56,16 @@ function Register({ handleRegister, errorFromApi, setErrorFromApi }) {
                   </div>
                   <form onSubmit={handleSubmit} className="register__form">
                     <p className="register__name">Имя</p>
-                    <input value={name} onChange={handleChangeName} className="register__input" type="text" placeholder="" required></input>
+                    <input value={name} onChange={handleChangeName} className="register__input" type="text" placeholder="" maxLength="10" minLength="2" required></input>
                     <span className="register__error">{errorName}</span>
                     <p className="register__name">E-mail</p>
                     <input value={email} onChange={handleChangeEmail} className="register__input" type="email" placeholder="" minLength="8" required></input>
                     <span className="register__error">{errorEmail}</span>
                     <p className="register__name">Пароль</p>
-                    <input value={password} onChange={handleChangePassword} className="register__input" type="password" placeholder="" required></input>
+                    <input value={password} onChange={handleChangePassword} className="register__input" type="password" placeholder="" maxLength="10" minLength="8" required></input>
                     <span className="register__error">{errorPasword}</span>
+                    {isErrorLoginFromApi ? (<p className="register__error">{errorFromApi}</p>) : ''}
                     <button className={buttonClassName}>Зарегистрироваться</button>
-                    <span className="register__error">{errorFromApi}</span>
                   </form>
                   <div className="register__signin">
                       <p className="register__text">Уже зарегистрированы?</p>

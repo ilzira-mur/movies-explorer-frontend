@@ -1,10 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import '../Register/Register.css';
 import logo from '../../images/logo_main.svg';
 import { Link } from 'react-router-dom';
-import { useEffect } from 'react';
 
-function Login({ handleLogin, errorFromApi, setErrorFromApi }) {
+function Login({ handleLogin, errorFromApi, isErrorLoginFromApi, setErrorFromApi }) {
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [errorEmail, setErrorEmail] = React.useState('');
@@ -12,9 +11,6 @@ function Login({ handleLogin, errorFromApi, setErrorFromApi }) {
   const [isValidEmail, setIsValidEmail] = React.useState(false);
   const [isValidPassword, setIsValidPassword] = React.useState(false);
 
-  useEffect(() => {
-    setErrorFromApi('');
-  }, [setErrorFromApi])
   
   const handleChangeEmail = (e) => {
     const target = e.target;
@@ -34,6 +30,10 @@ function Login({ handleLogin, errorFromApi, setErrorFromApi }) {
     handleLogin(email, password);
   }
 
+  useEffect(() => {
+    setErrorFromApi('')
+  }, [setErrorFromApi])
+
   const buttonClassName = `${(isValidEmail && isValidPassword === true) ? "register__button" : "register__button_disable"}`;
 
     return (
@@ -48,10 +48,10 @@ function Login({ handleLogin, errorFromApi, setErrorFromApi }) {
                     <input value={email} onChange={handleChangeEmail} className="register__input" type="email" placeholder="" required></input>
                     <span className="register__error">{errorEmail}</span>
                     <p className="register__name">Пароль</p>
-                    <input value={password} onChange={handleChangePassword} className="register__input" type="password" placeholder="" required></input>
+                    <input value={password} onChange={handleChangePassword} className="register__input" type="password" placeholder="" maxLength="10" minLength="8" required></input>
                     <span className="register__error">{errorPasword}</span>
+                    {isErrorLoginFromApi ? (<span className="register__error">{errorFromApi}</span>) : ''}
                     <button className={buttonClassName}>Войти</button>
-                    <span className="register__error">{errorFromApi}</span>
                   </form>
                   <div className="register__signin">
                       <p className="register__text">Ещё не зарегистрированы?</p>

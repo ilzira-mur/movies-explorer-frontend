@@ -60,7 +60,39 @@
     line-height: 16px;
     letter-spacing: 0px;
     text-align: center;
+    color: #3DDC84;
+    text-decoration: none;
+    cursor: pointer;
+    display: block;
+    padding: 0;
+    background-color: transparent;
+    cursor: pointer;
+    border: none;
+}
+
+.profile__button:hover {
+    transition: 0.1s linear;
+    opacity: 0.7;
+  }
+
+.profile__button_disable {
+    margin-top: 220px;
+    margin-bottom: 16px;
+    font-family: 'Inter', Arial, sans-serif;
+    font-size: 13px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 16px;
+    letter-spacing: 0px;
+    text-align: center;
     color: #FFF;
+    text-decoration: none;
+    cursor: pointer;
+    display: block;
+    padding: 0;
+    background-color: transparent;
+    cursor: pointer;
+    border: none;
 }
 
 .profile__button_tupe_exit {

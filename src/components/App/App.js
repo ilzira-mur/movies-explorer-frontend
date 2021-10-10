@@ -27,6 +27,7 @@ function App() {
     const [checkboxSavedCards, setCheckboxSavedCards] = React.useState(false);
     const [checkboxCards, setCheckboxCards] = React.useState(false);
     const [errorFromApi, setErrorFromApi] = React.useState('');
+    const [isErrorLoginFromApi, setErrorLoginFromApi] = React.useState(false);
     const [isMoviesErrorFromApi, setIsMoviesErrorFromApi] = React.useState(false);
     const [isSavedMovies, setIsSavedMovies] = React.useState(true);
     const [isSearchMovies, setIsSearchMovies] = React.useState(false);
@@ -113,6 +114,7 @@ function App() {
         })
         .catch((err) => {
           console.log(`${err}`);
+          setErrorLoginFromApi(true);
           setErrorFromApi(err);
         })
     };
@@ -133,16 +135,22 @@ function App() {
         })
         .catch((err) => {
           console.log(`${err}`);
+          setErrorLoginFromApi(true);
           setErrorFromApi(err);
         });
     }
 
     const handleUpdateUser = (userInfo) => {
+      setErrorFromApi('');
       mainApi.setUserInfo(userInfo)
       .then((newUser) => {
           setCurrentUser(newUser);
       })
-      .catch((err) => console.log(`${err}`))
+      .catch((err) => {
+        console.log(`${err}`);
+        setErrorLoginFromApi(true);
+        setErrorFromApi(err);
+      })
     }
 
     const onSignOut = () => {
@@ -271,10 +279,10 @@ function App() {
                     <Main loggedIn={loggedIn} />
                 </Route>
                 <Route path="/signup">
-                    <Register handleRegister={handleRegister} errorFromApi={errorFromApi} setErrorFromApi={setErrorFromApi} />
+                    <Register handleRegister={handleRegister} errorFromApi={errorFromApi} isErrorLoginFromApi={isErrorLoginFromApi} setErrorFromApi={setErrorFromApi} />
                 </Route>
                 <Route path="/signin">
-                    <Login handleLogin={handleLogin} errorFromApi={errorFromApi} setErrorFromApi={setErrorFromApi} />
+                    <Login handleLogin={handleLogin} errorFromApi={errorFromApi} isErrorLoginFromApi={isErrorLoginFromApi} setErrorFromApi={setErrorFromApi} />
                 </Route>
                 <ProtectedRoute 
                     loggedIn={loggedIn}
@@ -303,7 +311,10 @@ function App() {
                     component={Profile}
                     onNavigation={handleNavigationClick}
                     name={userData.name}
-                    email={userData.email} />
+                    email={userData.email}
+                    errorFromApi={errorFromApi}
+                    isErrorLoginFromApi={isErrorLoginFromApi}
+                    setErrorFromApi={setErrorFromApi} />
                 <ProtectedRoute 
                     loggedIn={loggedIn}
                     onCardRemove={handleLikeCardStatus}

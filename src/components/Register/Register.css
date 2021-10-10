@@ -100,6 +100,7 @@
     padding: 0;
     cursor: pointer;
     border: none;
+    display: ruby-text;
 }
 
 .register__button:hover {
@@ -193,6 +194,10 @@
     text-align: left;
     color: #EE3465;
     margin-top: 6px;
+}
+
+.register__api-error {
+
 }
 
 @media screen and (max-width: 768px) {
