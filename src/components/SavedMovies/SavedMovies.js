@@ -7,7 +7,7 @@ import MoviesCardList from "./MoviesCardList/MoviesCardList";
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 
 function SavedMovies({ onNavigation, savedCards, onSubmit, onCardRemove, onCheckbox, checkbox, savedMovieSearch,
-showSavedSearchedMovies, isSavedMovies, foundSavedMovies }) {
+showSavedSearchedMovies, isSavedMovies, foundSavedMovies, foundShortSavedMovies }) {
 
 
     const currentUser = useContext(CurrentUserContext);
@@ -30,7 +30,7 @@ showSavedSearchedMovies, isSavedMovies, foundSavedMovies }) {
             showSavedSearchedMovies={showSavedSearchedMovies} onCheckbox={onCheckbox} checkbox={checkbox} />
             {checkOwnerMovieList() ? foundSavedMovies.length ?
             (<MoviesCardList owner={currentUser._id}
-                savedCards={checkbox ? shortSavedMovies : foundSavedMovies} onCardRemove={onCardRemove} foundSavedMovies={foundSavedMovies} />)
+                savedCards={checkbox ? foundShortSavedMovies : foundSavedMovies} onCardRemove={onCardRemove} foundSavedMovies={foundSavedMovies} />)
             :
             (<MoviesCardList
                 owner={currentUser._id}

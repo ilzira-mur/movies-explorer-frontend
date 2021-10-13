@@ -5,6 +5,8 @@ import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
 import ButtonMore from '../Movies/ButtonMore/ButtonMore';
 import React, { useEffect } from 'react';
+import { SHORT_MOVIE, ADD_MOVIES_1280, ADD_MOVIES_768,
+  ADD_MOVIES_320, INIT_MOVIES_1280, INIT_MOVIES_768, INIT_MOVIES_320 } from '../../utils/constants';
 
 function Movies({ foundMovies, isSearching, onSubmit, onCardLike, onNavigation, savedCards, owner,
   onCheckbox, checkbox, onSearch, startPreloader, showSearchMovies, isSearchMovies, isMoviesErrorFromApi }) {
@@ -19,15 +21,15 @@ function Movies({ foundMovies, isSearching, onSubmit, onCardLike, onNavigation, 
     const pageWidth = document.documentElement.scrollWidth;
 
     if (pageWidth > 768) {
-      initWidthCards = 12;
-      addWidthCards = 3;
+      initWidthCards = INIT_MOVIES_1280;
+      addWidthCards = ADD_MOVIES_1280;
     } else {
-      initWidthCards = 8;
-      addWidthCards = 2;
+      initWidthCards = INIT_MOVIES_768;
+      addWidthCards = ADD_MOVIES_768;
     };
     if (pageWidth < 768) {
-      initWidthCards = 5;
-      addWidthCards = 1;
+      initWidthCards = INIT_MOVIES_320;
+      addWidthCards = ADD_MOVIES_320;
     }
     if (str === 'init') {
       return initWidthCards
@@ -47,7 +49,7 @@ function Movies({ foundMovies, isSearching, onSubmit, onCardLike, onNavigation, 
 
   useEffect(() => {
     foundMovies.length !==0 &&
-    setShortMovies(foundMovies.filter(card => card.duration <= 40));
+    setShortMovies(foundMovies.filter(card => card.duration <= SHORT_MOVIE));
   }, [foundMovies]);
   
 

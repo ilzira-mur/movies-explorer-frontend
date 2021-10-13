@@ -14,6 +14,14 @@ function Register({ handleRegister, errorFromApi, isErrorLoginFromApi, setErrorF
   const [isValidName, setIsValidName] = React.useState(false);
   const [isValidEmail, setIsValidEmail] = React.useState(false);
   const [isValidPassword, setIsValidPassword] = React.useState(false);
+  const [isDisabled, setIsDisabled] = React.useState(false);
+
+  useEffect(() => {
+    if (isValidName && isValidEmail && isValidPassword === true) {
+      setIsDisabled(false);
+    }
+    else setIsDisabled(true);
+   }, [setIsDisabled, isValidName, isValidEmail, isValidPassword]) 
   
   const handleChangeName = (e) => {
     const target = e.target;
@@ -65,7 +73,7 @@ function Register({ handleRegister, errorFromApi, isErrorLoginFromApi, setErrorF
                     <input value={password} onChange={handleChangePassword} className="register__input" type="password" placeholder="" maxLength="10" minLength="8" required></input>
                     <span className="register__error">{errorPasword}</span>
                     {isErrorLoginFromApi ? (<p className="register__error">{errorFromApi}</p>) : ''}
-                    <button className={buttonClassName}>Зарегистрироваться</button>
+                    <button className={buttonClassName} disabled={isDisabled ? "disabled" : ""}>Зарегистрироваться</button>
                   </form>
                   <div className="register__signin">
                       <p className="register__text">Уже зарегистрированы?</p>

@@ -1,17 +1,32 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './Profile.css';
 import Header from '../Header/Header';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 
-function Profile({ onNavigation, onSignOut, onUpdateUser, errorFromApi, isErrorLoginFromApi, setErrorFromApi }) {
+function Profile({ onNavigation, onSignOut, onUpdateUser, errorFromApi, isErrorLoginFromApi, setErrorFromApi, isSuccessfulNameChange }) {
 
     const currentUser = React.useContext(CurrentUserContext);
-    const [name, setName] = React.useState();
-    const [email, setEmail] = React.useState();
+    const [name, setName] = React.useState('');
+    const [email, setEmail] = React.useState('');
     const [errorName, setErrorName] = React.useState('');
     const [errorEmail, setErrorEmail] = React.useState('');
     const [isValidName, setIsValidName] = React.useState(false);
     const [isValidEmail, setIsValidEmail] = React.useState(false);
+    const [isDisabled, setIsDisabled] = React.useState(false);
+
+    useEffect(()=>{
+        if(name === currentUser.name && email === currentUser.email){
+            setIsValidName(false);
+            setIsValidEmail(false);
+        }
+    }, [name, currentUser.name, email, currentUser.email])
+
+    useEffect(() => {
+    if (isValidName && isValidEmail === true) {
+      setIsDisabled(false);
+    }
+    else setIsDisabled(true);
+   }, [setIsDisabled, isValidName, isValidEmail])
 
     React.useEffect(() => {
         setName(currentUser.name);
@@ -61,8 +76,9 @@ function Profile({ onNavigation, onSignOut, onUpdateUser, errorFromApi, isErrorL
                         <input className="profile__text profile__input" value={email || ''} onChange={handleEmailChange} type="email" id="profileemail" name="profileemail" required />
                     </div>
                     <span className="register__error">{errorEmail}</span>
-                    <button type="submit" className={buttonClassName}>Редактировать</button>
+                    <button type="submit" className={buttonClassName} disabled={isDisabled ? "disabled" : ""}>Редактировать</button>
                     {isErrorLoginFromApi ? (<p className="register__error">{errorFromApi}</p>) : ''}
+                    {isSuccessfulNameChange ? (<p className="register__error">изменения имени и почты прошли успешно</p>) : ''}
                  </form>
                  <button className="link button profile__button profile__button_tupe_exit" onClick={onSignOut}>Выйти из аккаунта</button>
         </section>

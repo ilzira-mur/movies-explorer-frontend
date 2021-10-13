@@ -12,18 +12,25 @@ function MoviesCardList({ isMoviesErrorFromApi, cards, widthCards, onCardLike, s
             </>
             ) : (
                 <>
-                {isSearching && <Preloader />}
-                {cards.length > 0 ? (
+                {isSearching ?
+                ( <Preloader />) : (
                     <>
-                    <section className="moviescardlist">
-                        {cards.slice(0, widthCards).map(card => (<MoviesCard {...cards} key={card.id} card={card} onCardLike={onCardLike} savedCards={savedCards} owner={owner} />)) }
-                    </section>
+                        <section className="moviescardlist">
+                            {cards.length === 0 ? 
+                                (
+                                    <p className="moviescardlist__text">«Ничего не найдено»</p>
+                                ) : (
+                                <>
+                                    {cards.slice(0, widthCards).map(card => (<MoviesCard {...cards} key={card.id} card={card} onCardLike={onCardLike} savedCards={savedCards} owner={owner} />))}
+                                </>
+                                )}
+                        </section>
                     </>
-                    ) : (
-                    <>
-                        <p className="moviescardlist__text">«Ничего не найдено»</p>
-                    </>
-                )}
+                )
+                    
+                
+                }
+                
                     
             </>
             )

@@ -13,6 +13,7 @@ import moviesApi from '../../utils/MoviesApi';
 import mainApi from '../../utils/MainApi';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
+import { SHORT_MOVIE } from '../../utils/constants';
 
 function App() {
   
@@ -24,6 +25,7 @@ function App() {
     const [userData, setUserData] = React.useState({});
     const [foundMovies, setFoundMovies] = React.useState([]);
     const [foundSavedMovies, setFoundSavedMovies] = React.useState([]);
+    const [foundShortSavedMovies, setFoundShortSavedMovies] = React.useState([]);
     const [checkboxSavedCards, setCheckboxSavedCards] = React.useState(false);
     const [checkboxCards, setCheckboxCards] = React.useState(false);
     const [errorFromApi, setErrorFromApi] = React.useState('');
@@ -32,26 +34,9 @@ function App() {
     const [isSavedMovies, setIsSavedMovies] = React.useState(true);
     const [isSearchMovies, setIsSearchMovies] = React.useState(false);
     const [isSearching, setIsSearching] = React.useState(false);
+    const [isSuccessfulNameChange, setIsSuccessfulNameChange] = React.useState(false);
     const imageUrl = "https://api.nomoreparties.co";
     const history = useHistory();
-    
-    useEffect(() => {
-      const token = localStorage.getItem('token');
-      if (token) {
-        mainApi.getContent(token)
-        .then((res) => {
-          if (res) {
-            setUserData({
-              name: res.name,
-              email: res.email
-            });
-            setLoggedIn(true);
-            history.push('/movies');
-          }
-        })
-        .catch((err) => {console.log(`${err}`)}
-        )}
-    }, [history]);
 
     useEffect(()=>{
       if (loggedIn) {
@@ -65,6 +50,25 @@ function App() {
         });
         }
     }, [loggedIn])
+
+    useEffect(() => {
+      const token = localStorage.getItem('token');
+      if (token) {
+        mainApi.getContent(token)
+        .then((res) => {
+          if (res) {
+            setUserData({
+              name: res.name,
+              email: res.email
+            });
+            setLoggedIn(true);
+          }
+        })
+        .catch((err) => {console.log(`${err}`)}
+        )}
+    }, [history]);
+
+    
 
     useEffect(() => {
       if (loggedIn) {
@@ -145,6 +149,7 @@ function App() {
       mainApi.setUserInfo(userInfo)
       .then((newUser) => {
           setCurrentUser(newUser);
+          setIsSuccessfulNameChange(true);
       })
       .catch((err) => {
         console.log(`${err}`);
@@ -156,7 +161,7 @@ function App() {
     const onSignOut = () => {
       localStorage.removeItem('token');
       setLoggedIn(false);
-      history.push('/signin');
+      history.push('/');
     }
 
     const changeMovieCard = (card) => {
@@ -179,8 +184,9 @@ function App() {
             changeMovieCards = cards.map(card => changeMovieCard(card));
             setCards(changeMovieCards);
             localStorage.setItem('cards', JSON.stringify(changeMovieCards));
-            setFoundMovies(movieSearch(query));
+            const foundMovies = movieSearch(query, changeMovieCards, 'found-cards');
             setIsSearching(false);
+            setFoundMovies(foundMovies);
           })
           .catch((err) => {
             console.log(`${err}`);
@@ -188,35 +194,35 @@ function App() {
           })
       } else {
         setCards(JSON.parse(localStorage.getItem('cards')));
-        setFoundMovies(movieSearch(query));
         setIsSearching(false);
+        setFoundMovies(movieSearch(query, cards, 'found-cards'));
       }
     }
 
-    const movieSearch = (query) => {
+    const movieSearch = (search, cards, name) => {
       if (checkboxCards) {
         const shortMovie = cards.filter((movie) => {
           return (
-            movie.duration <= 40 && movie.nameRU.toLowerCase().includes(query.toLowerCase())
+            movie.duration <= SHORT_MOVIE && movie.nameRU.toLowerCase().includes(search.toLowerCase())
           );
         });
         return shortMovie;
       } else {
-        const foundMovie = cards.filter((movie) => {
-          return movie.nameRU.toLowerCase().includes(query.toLowerCase());
-        });
-        return foundMovie;
+        const foundMovies = cards.filter((movie) => movie.nameRU.toLowerCase().includes(search.toLowerCase()));
+        localStorage.setItem(name, JSON.stringify(foundMovies));
+        return foundMovies
       }
+      
     }
 
     const savedMovieSearch = (search) => {
       if (checkboxSavedCards) {
-        const shortMovie = savedCards.filter((movie) => {
+        const foundShortMovie = savedCards.filter((movie) => {
           return (
-            movie.duration <= 40 && movie.nameRU.toLowerCase().includes(search.toLowerCase())
+            movie.duration <= SHORT_MOVIE && movie.nameRU.toLowerCase().includes(search.toLowerCase())
           );
         });
-        setFoundSavedMovies(shortMovie);
+        setFoundShortSavedMovies(foundShortMovie);
       } else {
         const foundSavedMovie = savedCards.filter((movie) => {
           return movie.nameRU.toLowerCase().includes(search.toLowerCase());
@@ -227,15 +233,15 @@ function App() {
 
     const handleLikeCardStatus = (card) => {
       const { country, director, duration, year, description, image, trailer, thumbnail, nameEN, nameRU, id: movieId } = card;
-      const isLiked = savedCards.some((savedCard) => ((savedCard.movieId === card.movieId) && savedCard.owner === currentUser._id));
-      const deleteCard = savedCards.find((savedCard) => ((savedCard.movieId === card.movieId) && savedCard.owner === currentUser._id)) || '';
+      const isLiked = savedCards.some((savedCard) => ((savedCard.movieId === (card.id || card.movieId)) && savedCard.owner === currentUser._id));
+      const deleteCard = savedCards.find((savedCard) => ((savedCard.movieId === (card.id || card.movieId)) && savedCard.owner === currentUser._id)) || '';
       mainApi
         .changeLikeCardStatus({
           country, director, duration, year, description, image, trailer, thumbnail, nameEN, nameRU, movieId
         }, deleteCard._id, !isLiked, localStorage.getItem('token'))
         .then((likeMovie) => {
           setFoundMovies((state) => state.map((c) => (c.id === card.id ? card : c)));
-          !isLiked ? setSavedCards([...savedCards, likeMovie]) : setSavedCards((state) => state.filter((c) => c.movieId !== card.movieId));
+          !isLiked ? setSavedCards([...savedCards, likeMovie]) : setSavedCards((state) => state.filter((c) => c.movieId !== (card.id || card.movieId)));
         })
         .catch(err => console.log(`${err}`));
     }
@@ -314,7 +320,8 @@ function App() {
                     email={userData.email}
                     errorFromApi={errorFromApi}
                     isErrorLoginFromApi={isErrorLoginFromApi}
-                    setErrorFromApi={setErrorFromApi} />
+                    setErrorFromApi={setErrorFromApi}
+                    isSuccessfulNameChange={isSuccessfulNameChange} />
                 <ProtectedRoute 
                     loggedIn={loggedIn}
                     onCardRemove={handleLikeCardStatus}
@@ -323,6 +330,7 @@ function App() {
                     onNavigation={handleNavigationClick}
                     savedCards={savedCards}
                     showSavedSearchedMovies={showSavedSearchedMovies}
+                    foundShortSavedMovies={foundShortSavedMovies}
                     foundSavedMovies={foundSavedMovies}
                     isSavedMovies={isSavedMovies}
                     savedMovieSearch={savedMovieSearch}
