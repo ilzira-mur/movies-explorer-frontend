@@ -3,7 +3,7 @@ import './Register.css';
 import logo from '../../images/logo_main.svg';
 import { Link } from 'react-router-dom';
 
-function Register({ handleRegister, errorFromApi, isErrorLoginFromApi, setErrorFromApi }) {
+function Register({ handleRegister, errorFromApi, isErrorLoginFromApi, setErrorFromApi, isFormDisabled }) {
 
   const [name, setName] = React.useState('');
   const [email, setEmail] = React.useState('');
@@ -62,7 +62,7 @@ function Register({ handleRegister, errorFromApi, isErrorLoginFromApi, setErrorF
                     <Link to="/" className="link header__logo"><img src={logo} alt="Логотип"/></Link>
                     <h2 className="register__header">Добро пожаловать!</h2>
                   </div>
-                  <form onSubmit={handleSubmit} className="register__form">
+                  <form onSubmit={handleSubmit} className="register__form" disabled={isFormDisabled ? "disabled" : ""}>
                     <p className="register__name">Имя</p>
                     <input value={name} onChange={handleChangeName} className="register__input" type="text" placeholder="" maxLength="10" minLength="2" required></input>
                     <span className="register__error">{errorName}</span>

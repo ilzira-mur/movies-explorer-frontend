@@ -3,7 +3,7 @@ import './Profile.css';
 import Header from '../Header/Header';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 
-function Profile({ onNavigation, onSignOut, onUpdateUser, errorFromApi, isErrorLoginFromApi, setErrorFromApi, isSuccessfulNameChange }) {
+function Profile({ onNavigation, onSignOut, onUpdateUser, errorFromApi, isErrorLoginFromApi, setErrorFromApi, isSuccessfulNameChange, isFormDisabled }) {
 
     const currentUser = React.useContext(CurrentUserContext);
     const [name, setName] = React.useState('');
@@ -65,7 +65,7 @@ function Profile({ onNavigation, onSignOut, onUpdateUser, errorFromApi, isErrorL
         <section className="register">
                  <Header onNavigation={onNavigation}/>
                  <h2 className="profile__header">Привет, {name}!</h2>
-                 <form onSubmit={handleSubmit} className="profile__info">
+                 <form onSubmit={handleSubmit} className="profile__info" disabled={isFormDisabled ? "disabled" : ""}>
                     <div className="profile__data">
                         <p className="profile__text">Имя</p>
                         <input className="profile__text profile__input" value={name || ''} onChange={handleNameChange} type="text" id ="profilename" name="profilename" maxLength="10" minLength="2" required />

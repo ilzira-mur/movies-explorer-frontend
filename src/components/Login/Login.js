@@ -3,7 +3,7 @@ import '../Register/Register.css';
 import logo from '../../images/logo_main.svg';
 import { Link } from 'react-router-dom';
 
-function Login({ handleLogin, errorFromApi, isErrorLoginFromApi, setErrorFromApi }) {
+function Login({ handleLogin, errorFromApi, isErrorLoginFromApi, setErrorFromApi, isFormDisabled }) {
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [errorEmail, setErrorEmail] = React.useState('');
@@ -11,6 +11,8 @@ function Login({ handleLogin, errorFromApi, isErrorLoginFromApi, setErrorFromApi
   const [isValidEmail, setIsValidEmail] = React.useState(false);
   const [isValidPassword, setIsValidPassword] = React.useState(false);
   const [isDisabled, setIsDisabled] = React.useState(false);
+
+  
 
   useEffect(() => {
     if (isValidEmail && isValidPassword === true) {
@@ -50,7 +52,7 @@ function Login({ handleLogin, errorFromApi, isErrorLoginFromApi, setErrorFromApi
                     <Link to="/" className="link header__logo"><img src={logo} alt="Логотип"/></Link>
                     <h2 className="register__header">Рады видеть!</h2>
                   </div>
-                  <form onSubmit={handleSubmit} className="register__form">
+                  <form onSubmit={handleSubmit} className="register__form" disabled={isFormDisabled ? "disabled" : ""}>
                     <p className="register__name">E-mail</p>
                     <input value={email} onChange={handleChangeEmail} className="register__input" type="email" placeholder="" required></input>
                     <span className="register__error">{errorEmail}</span>

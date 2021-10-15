@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import './App.css';
 import Main from '../Main/Main';
-import { Route, Switch, useHistory } from "react-router-dom";
+import { Route, Switch, useHistory, Redirect } from "react-router-dom";
 import Movies from '../Movies/Movies';
 import Register from '../Register/Register';
 import Login from '../Login/Login';
@@ -26,8 +26,8 @@ function App() {
     const [foundMovies, setFoundMovies] = React.useState([]);
     const [foundSavedMovies, setFoundSavedMovies] = React.useState([]);
     const [foundShortSavedMovies, setFoundShortSavedMovies] = React.useState([]);
-    const [checkboxSavedCards, setCheckboxSavedCards] = React.useState(false);
-    const [checkboxCards, setCheckboxCards] = React.useState(false);
+    const [checkboxSavedCards, setCheckboxSavedCards] = React.useState(true);
+    const [checkboxCards, setCheckboxCards] = React.useState(true);
     const [errorFromApi, setErrorFromApi] = React.useState('');
     const [isErrorLoginFromApi, setErrorLoginFromApi] = React.useState(false);
     const [isMoviesErrorFromApi, setIsMoviesErrorFromApi] = React.useState(false);
@@ -35,6 +35,7 @@ function App() {
     const [isSearchMovies, setIsSearchMovies] = React.useState(false);
     const [isSearching, setIsSearching] = React.useState(false);
     const [isSuccessfulNameChange, setIsSuccessfulNameChange] = React.useState(false);
+    const [isFormDisabled, setIsFormDisabled] = React.useState(false);
     const imageUrl = "https://api.nomoreparties.co";
     const history = useHistory();
 
@@ -73,24 +74,20 @@ function App() {
     useEffect(() => {
       if (loggedIn) {
         if (!localStorage.getItem('saved-cards')) {
-          getSavedMovies();
-        } else {
-          setSavedCards(JSON.parse(localStorage.getItem('saved-cards')));
-        }
+          mainApi
+          .getMoviesCard(localStorage.getItem('token'))
+          .then((cards) => {
+            setSavedCards(cards);
+            localStorage.setItem('saved-cards', JSON.stringify(cards));
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+          } else {
+            setSavedCards(JSON.parse(localStorage.getItem('saved-cards')));
+          }
       }
     }, [currentUser, loggedIn]);
-
-    const getSavedMovies = () => {
-      mainApi
-        .getMoviesCard(localStorage.getItem('token'))
-        .then((cards) => {
-          setSavedCards(cards);
-          localStorage.setItem('saved-cards', JSON.stringify(cards));
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
 
     useEffect(() => {
       localStorage.getItem('cards') && setCards(JSON.parse(localStorage.getItem('cards')));
@@ -104,6 +101,7 @@ function App() {
 
     const handleRegister = (name, email, password) => {
       setErrorFromApi('');
+      setIsFormDisabled(true);
       mainApi.registerUser(name, email, password)
         .then(data => {
           if (data) {
@@ -121,10 +119,14 @@ function App() {
           setErrorLoginFromApi(true);
           setErrorFromApi(err);
         })
+        .finally(() => {
+          setIsFormDisabled(false);
+        });
     };
 
     const handleLogin = (email, password) => {
       setErrorFromApi('');
+      setIsFormDisabled(true);
       mainApi.loginUser(email, password)
         .then(data => {
           if (data.token) {
@@ -141,11 +143,15 @@ function App() {
           console.log(`${err}`);
           setErrorLoginFromApi(true);
           setErrorFromApi(err);
+        })
+        .finally(() => {
+          setIsFormDisabled(false);
         });
     }
 
     const handleUpdateUser = (userInfo) => {
       setErrorFromApi('');
+      setIsFormDisabled(true);
       mainApi.setUserInfo(userInfo)
       .then((newUser) => {
           setCurrentUser(newUser);
@@ -156,6 +162,9 @@ function App() {
         setErrorLoginFromApi(true);
         setErrorFromApi(err);
       })
+      .finally(() => {
+          setIsFormDisabled(false);
+        });
     }
 
     const onSignOut = () => {
@@ -285,10 +294,14 @@ function App() {
                     <Main loggedIn={loggedIn} />
                 </Route>
                 <Route path="/signup">
-                    <Register handleRegister={handleRegister} errorFromApi={errorFromApi} isErrorLoginFromApi={isErrorLoginFromApi} setErrorFromApi={setErrorFromApi} />
+                    {!loggedIn ? 
+                      <Register handleRegister={handleRegister} isFormDisabled={isFormDisabled} errorFromApi={errorFromApi} isErrorLoginFromApi={isErrorLoginFromApi} setErrorFromApi={setErrorFromApi} />
+                      : <Redirect to="/movies" />}
                 </Route>
                 <Route path="/signin">
-                    <Login handleLogin={handleLogin} errorFromApi={errorFromApi} isErrorLoginFromApi={isErrorLoginFromApi} setErrorFromApi={setErrorFromApi} />
+                    {!loggedIn ? 
+                    <Login handleLogin={handleLogin} isFormDisabled={isFormDisabled} errorFromApi={errorFromApi} isErrorLoginFromApi={isErrorLoginFromApi} setErrorFromApi={setErrorFromApi} />
+                    : <Redirect to="/movies" />}
                 </Route>
                 <ProtectedRoute 
                     loggedIn={loggedIn}
@@ -321,7 +334,8 @@ function App() {
                     errorFromApi={errorFromApi}
                     isErrorLoginFromApi={isErrorLoginFromApi}
                     setErrorFromApi={setErrorFromApi}
-                    isSuccessfulNameChange={isSuccessfulNameChange} />
+                    isSuccessfulNameChange={isSuccessfulNameChange}
+                    isFormDisabled={isFormDisabled} />
                 <ProtectedRoute 
                     loggedIn={loggedIn}
                     onCardRemove={handleLikeCardStatus}
@@ -336,7 +350,7 @@ function App() {
                     savedMovieSearch={savedMovieSearch}
                     onCheckbox={handleCheckboxSavedCards}
                     checkbox={checkboxSavedCards} />
-                <Route>
+                <Route path="*">
                     <NotFound />
                 </Route>
             </Switch>

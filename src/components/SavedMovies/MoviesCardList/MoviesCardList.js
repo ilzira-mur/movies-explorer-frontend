@@ -6,8 +6,8 @@ function MoviesCardList({ savedCards, onCardRemove, owner }) {
     return(
         <section className="moviescardlist">
             { savedCards &&
-        savedCards.map((item) => item.owner === owner ? (
-          <MoviesCard key={item.movieId} card={item} onCardRemove={onCardRemove} />
+        savedCards.map((card) => card.owner === owner ? (
+          <MoviesCard key={card.movieId} card={card} onCardRemove={onCardRemove} />
         ) : '')}
         </section>
     );

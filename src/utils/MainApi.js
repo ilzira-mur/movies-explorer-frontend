@@ -19,7 +19,7 @@ class MainApi {
   }
 
   getMoviesCard(token) {
-    return fetch(`${this._baseUrl}/movies`, {
+    return fetch(`${this._url}/movies`, {
       headers: {
         'Content-Type': 'application/json',
         'authorization': `Bearer ${token}`
