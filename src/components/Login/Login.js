@@ -12,8 +12,6 @@ function Login({ handleLogin, errorFromApi, isErrorLoginFromApi, setErrorFromApi
   const [isValidPassword, setIsValidPassword] = React.useState(false);
   const [isDisabled, setIsDisabled] = React.useState(false);
 
-  
-
   useEffect(() => {
     if (isValidEmail && isValidPassword === true) {
       setIsDisabled(false);

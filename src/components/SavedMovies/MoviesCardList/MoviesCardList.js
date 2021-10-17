@@ -5,10 +5,16 @@ function MoviesCardList({ savedCards, onCardRemove, owner }) {
 
     return(
         <section className="moviescardlist">
-            { savedCards &&
-        savedCards.map((card) => card.owner === owner ? (
-          <MoviesCard key={card.movieId} card={card} onCardRemove={onCardRemove} />
-        ) : '')}
+                {savedCards.length === 0 ? 
+                    (
+                    <p className="moviescardlist__text">«Ничего не найдено»</p>
+                    ) : (
+                    <>
+                        { savedCards && savedCards.map((card) => card.owner === owner ? (
+                            <MoviesCard key={card.movieId} card={card} onCardRemove={onCardRemove} />
+                        ) : '')}
+                    </>
+                    )}
         </section>
     );
 }

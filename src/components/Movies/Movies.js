@@ -4,12 +4,13 @@ import MoviesCardList from '../Movies/MoviesCardList/MoviesCardList';
 import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
 import ButtonMore from '../Movies/ButtonMore/ButtonMore';
+import Preloader from './Preloader/Preloader';
 import React, { useEffect } from 'react';
 import { SHORT_MOVIE, ADD_MOVIES_1280, ADD_MOVIES_768,
   ADD_MOVIES_320, INIT_MOVIES_1280, INIT_MOVIES_768, INIT_MOVIES_320 } from '../../utils/constants';
 
-function Movies({ foundMovies, isSearching, onSubmit, onCardLike, onNavigation, savedCards, owner,
-  onCheckbox, checkbox, onSearch, startPreloader, showSearchMovies, isSearchMovies, isMoviesErrorFromApi }) {
+function Movies({ foundMovies="", isSearching, onSubmit, onCardLike, onNavigation, savedCards, owner,
+  onCheckbox, checkbox, onSearch, startPreloader, showSearchMovies, isSearchMovies, isMoviesErrorFromApi, isEmptySearch, emptyResultSearch }) {
   
   const [widthCards, setWidthCards] = React.useState(setWidthCard('init'));
   const [shortMovies, setShortMovies] = React.useState([]);
@@ -52,27 +53,29 @@ function Movies({ foundMovies, isSearching, onSubmit, onCardLike, onNavigation, 
     setShortMovies(foundMovies.filter(card => card.duration <= SHORT_MOVIE));
   }, [foundMovies]);
   
-
-  const searchedMoviesListLength = checkbox ? shortMovies.length : foundMovies.length;
   useEffect(() => {
-    widthCards < searchedMoviesListLength ? setMore(true) : setMore(false);
-  }, [widthCards, searchedMoviesListLength]);
+    widthCards < shortMovies.length ? setMore(true) : setMore(false);
+    widthCards < foundMovies.length ? setMore(true) : setMore(false);
+  }, [widthCards, foundMovies.length, shortMovies.length]);
 
-  
+
     return(
         <section className="movies">
                 <Header onNavigation={onNavigation} />
                 <SearchForm showSearchMovies={showSearchMovies} onSubmit={onSubmit} onCheckbox={onCheckbox}
                 checkbox={checkbox} onSearch={onSearch} startPreloader={startPreloader} />
-                {isSearchMovies ? 
-                (<MoviesCardList isSearching={isSearching}
-                cards={checkbox ? shortMovies : foundMovies}
+                {isSearching && (<Preloader />)}
+                {isMoviesErrorFromApi && (<p className="moviescardlist__text">«Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз»</p>)}
+                {isEmptySearch && (<p className="movies__text">Пожалуйста введите запрос в поиск</p>)}
+                {emptyResultSearch && (<p className="movies__text">«Ничего не найдено»</p>)}
+                {foundMovies.length ? (<MoviesCardList isSearching={isSearching}
+                cards={checkbox ? foundMovies : shortMovies}
                 onCardLike={onCardLike}
                 foundMovies={foundMovies}
                 widthCards={widthCards}
                 savedCards={savedCards}
                 owner={owner}
-                isMoviesErrorFromApi={isMoviesErrorFromApi} />)
+                emptyResultSearch={emptyResultSearch} />)
                 : ''}
                 {more && (<ButtonMore onClick={handleClick} />)}
                 <Footer />

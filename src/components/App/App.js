@@ -13,7 +13,6 @@ import moviesApi from '../../utils/MoviesApi';
 import mainApi from '../../utils/MainApi';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
-import { SHORT_MOVIE } from '../../utils/constants';
 
 function App() {
   
@@ -25,7 +24,6 @@ function App() {
     const [userData, setUserData] = React.useState({});
     const [foundMovies, setFoundMovies] = React.useState([]);
     const [foundSavedMovies, setFoundSavedMovies] = React.useState([]);
-    const [foundShortSavedMovies, setFoundShortSavedMovies] = React.useState([]);
     const [checkboxSavedCards, setCheckboxSavedCards] = React.useState(true);
     const [checkboxCards, setCheckboxCards] = React.useState(true);
     const [errorFromApi, setErrorFromApi] = React.useState('');
@@ -36,8 +34,11 @@ function App() {
     const [isSearching, setIsSearching] = React.useState(false);
     const [isSuccessfulNameChange, setIsSuccessfulNameChange] = React.useState(false);
     const [isFormDisabled, setIsFormDisabled] = React.useState(false);
+    const [isEmptySearch, setEmptySearch] = React.useState(false);
+    const [emptyResultSearch, setEmptyResultSearch] = React.useState(false);
     const imageUrl = "https://api.nomoreparties.co";
     const history = useHistory();
+
 
     useEffect(()=>{
       if (loggedIn) {
@@ -45,6 +46,7 @@ function App() {
           mainApi.getUserInfo()])
         .then(([userInfo]) => {
           setCurrentUser(userInfo);
+          setLoggedIn(true);
         })
         .catch(err => console.log(`${err}`))
         .finally(() => {
@@ -67,7 +69,7 @@ function App() {
         })
         .catch((err) => {console.log(`${err}`)}
         )}
-    }, [history]);
+    }, [loggedIn]);
 
     
 
@@ -92,7 +94,6 @@ function App() {
     useEffect(() => {
       localStorage.getItem('cards') && setCards(JSON.parse(localStorage.getItem('cards')));
       localStorage.getItem('found-cards') && setFoundMovies(JSON.parse(localStorage.getItem('found-cards')));
-      localStorage.getItem('found-saved-cards') && setFoundSavedMovies(JSON.parse(localStorage.getItem('found-saved-cards')));
     }, []);
     
     useEffect(() => {
@@ -136,7 +137,7 @@ function App() {
             });
             setLoggedIn(true);
             localStorage.setItem('token', data.token)
-            history.push('/movies');
+            history.push('/');
           }
         })
         .catch((err) => {
@@ -183,8 +184,10 @@ function App() {
         }
     }
 
-    const handleMovieSearch = (query) => {
+    const handleMovieSearch = (search) => {
       let changeMovieCards;
+      setEmptySearch(false);
+      setEmptyResultSearch(false)
       setIsSearching(true);
       if (!localStorage.getItem('cards')) {
         moviesApi
@@ -193,9 +196,10 @@ function App() {
             changeMovieCards = cards.map(card => changeMovieCard(card));
             setCards(changeMovieCards);
             localStorage.setItem('cards', JSON.stringify(changeMovieCards));
-            const foundMovies = movieSearch(query, changeMovieCards, 'found-cards');
+            const foundMovies = movieSearch(search, changeMovieCards, 'found-cards');
             setIsSearching(false);
             setFoundMovies(foundMovies);
+            
           })
           .catch((err) => {
             console.log(`${err}`);
@@ -204,41 +208,66 @@ function App() {
       } else {
         setCards(JSON.parse(localStorage.getItem('cards')));
         setIsSearching(false);
-        setFoundMovies(movieSearch(query, cards, 'found-cards'));
+        setFoundMovies(movieSearch(search, cards, 'found-cards'));
       }
     }
 
     const movieSearch = (search, cards, name) => {
-      if (checkboxCards) {
-        const shortMovie = cards.filter((movie) => {
-          return (
-            movie.duration <= SHORT_MOVIE && movie.nameRU.toLowerCase().includes(search.toLowerCase())
-          );
-        });
-        return shortMovie;
-      } else {
-        const foundMovies = cards.filter((movie) => movie.nameRU.toLowerCase().includes(search.toLowerCase()));
+    let foundMovies;
+    if (search.length === 0){
+      setEmptySearch(true);
+    } else {
+      foundMovies = cards.filter((card) => card.nameRU.toLowerCase().includes(search.toLowerCase()));
+      if (foundMovies.length !== 0) {
         localStorage.setItem(name, JSON.stringify(foundMovies));
-        return foundMovies
+      } else {
+        setEmptyResultSearch(true)
+        localStorage.removeItem(name)
       }
-      
+    }
+      return foundMovies;
     }
 
-    const savedMovieSearch = (search) => {
-      if (checkboxSavedCards) {
-        const foundShortMovie = savedCards.filter((movie) => {
-          return (
-            movie.duration <= SHORT_MOVIE && movie.nameRU.toLowerCase().includes(search.toLowerCase())
-          );
-        });
-        setFoundShortSavedMovies(foundShortMovie);
+    const handleSavedMovieSearch = (search) => {
+        setEmptySearch(false);
+        setEmptyResultSearch(false)
+        setIsSearching(true);
+        if (!localStorage.getItem('saved-cards')) {
+          setIsSearching(true);
+          mainApi
+            .getMoviesCard(localStorage.getItem('token'))
+            .then((cards) => {
+              setSavedCards(cards);
+              localStorage.setItem('saved-cards', JSON.stringify(cards));
+              setIsSearching(false);
+              setFoundSavedMovies(savedMovieSearch(search, cards, 'saved-cards'));
+            })
+            .catch(() => {
+              setIsSearching(false);
+            });
+        } else {
+          setSavedCards(JSON.parse(localStorage.getItem('saved-cards')));
+          setIsSearching(false);
+          setFoundSavedMovies(savedMovieSearch(search, savedCards, 'found-saved-cards'));
+        }
+    }
+
+    const savedMovieSearch = (search, cards, name) => {
+      let foundSavedMovies
+      if (search.length === 0){
+      setEmptySearch(true);
+    } else {
+        foundSavedMovies = savedCards.filter((movie) => movie.nameRU.toLowerCase().includes(search.toLowerCase()));
+        if (foundSavedMovies.length !== 0) {
+        localStorage.setItem(name, JSON.stringify(foundSavedMovies));
       } else {
-        const foundSavedMovie = savedCards.filter((movie) => {
-          return movie.nameRU.toLowerCase().includes(search.toLowerCase());
-        });
-        setFoundSavedMovies(foundSavedMovie);
+        setEmptyResultSearch(true)
+        localStorage.removeItem(name)
       }
     }
+        return foundSavedMovies;
+    }
+
 
     const handleLikeCardStatus = (card) => {
       const { country, director, duration, year, description, image, trailer, thumbnail, nameEN, nameRU, id: movieId } = card;
@@ -289,17 +318,18 @@ function App() {
     return (
         <div className="page">
             <CurrentUserContext.Provider value={currentUser}>
+            
             <Switch>
                 <Route exact path="/">
                     <Main loggedIn={loggedIn} />
                 </Route>
                 <Route path="/signup">
-                    {!loggedIn ? 
-                      <Register handleRegister={handleRegister} isFormDisabled={isFormDisabled} errorFromApi={errorFromApi} isErrorLoginFromApi={isErrorLoginFromApi} setErrorFromApi={setErrorFromApi} />
-                      : <Redirect to="/movies" />}
+                    {!loggedIn ?
+                    <Register handleRegister={handleRegister} isFormDisabled={isFormDisabled} errorFromApi={errorFromApi} isErrorLoginFromApi={isErrorLoginFromApi} setErrorFromApi={setErrorFromApi} />
+                    : <Redirect to="/movies" />}
                 </Route>
                 <Route path="/signin">
-                    {!loggedIn ? 
+                    {!loggedIn ?
                     <Login handleLogin={handleLogin} isFormDisabled={isFormDisabled} errorFromApi={errorFromApi} isErrorLoginFromApi={isErrorLoginFromApi} setErrorFromApi={setErrorFromApi} />
                     : <Redirect to="/movies" />}
                 </Route>
@@ -321,7 +351,9 @@ function App() {
                     checkbox={checkboxCards}
                     startPreloader={startPreloader}
                     setIsSearching={setIsSearching}
-                    isMoviesErrorFromApi={isMoviesErrorFromApi} />
+                    isMoviesErrorFromApi={isMoviesErrorFromApi}
+                    isEmptySearch={isEmptySearch}
+                    emptyResultSearch={emptyResultSearch} />
                 <ProtectedRoute 
                     loggedIn={loggedIn}
                     onSignOut={onSignOut}
@@ -344,16 +376,21 @@ function App() {
                     onNavigation={handleNavigationClick}
                     savedCards={savedCards}
                     showSavedSearchedMovies={showSavedSearchedMovies}
-                    foundShortSavedMovies={foundShortSavedMovies}
                     foundSavedMovies={foundSavedMovies}
                     isSavedMovies={isSavedMovies}
-                    savedMovieSearch={savedMovieSearch}
+                    savedMovieSearch={handleSavedMovieSearch}
                     onCheckbox={handleCheckboxSavedCards}
-                    checkbox={checkboxSavedCards} />
+                    checkbox={checkboxSavedCards}
+                    isSearching={isSearching}
+                    setIsSearching={setIsSearching}
+                    isMoviesErrorFromApi={isMoviesErrorFromApi}
+                    isEmptySearch={isEmptySearch}
+                    emptyResultSearch={emptyResultSearch} />
                 <Route path="*">
                     <NotFound />
                 </Route>
             </Switch>
+            
             <Navigation isOpen={isNavigationOpen} onClose={closeNavigation} />
             </CurrentUserContext.Provider>
         </div>
