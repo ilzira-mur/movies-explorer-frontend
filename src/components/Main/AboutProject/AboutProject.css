@@ -1,0 +1,216 @@
+.aboutproject {
+    max-width: 1280px;
+    background-color: #202020;
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+}
+
+.aboutproject__container {
+    max-width: 1140px;
+    margin: 0 70px;
+}
+
+.aboutproject__header {
+    font-family: 'Inter', Arial, sans-serif;
+    font-size: 22px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 27px;
+    letter-spacing: -0.04em;
+    text-align: left;
+    color: #FFF;
+    margin-top: 110px;
+    margin-left: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    padding-bottom: 23px;
+    border-bottom: 1px Solid #DADADA;
+}
+
+.aboutproject__table {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-top: 70px;
+    margin-left: 0;
+    margin-right: 0;
+    margin-bottom: 110px;
+}
+
+.aboutproject__text {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    max-width: 550px;
+    width: 100%;
+    margin-right: 40px;
+}
+
+.aboutproject__text:last-of-type {
+    margin-right: 0;
+}
+
+.aboutproject__lead {
+    font-family: 'Inter', Arial, sans-serif;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 24px;
+    letter-spacing: -0.04em;
+    text-align: left;
+    color: #FFF;
+    margin-bottom: 26px;
+    margin-top: 0;
+}
+
+.aboutproject__paragraph {
+    font-family: 'Inter', Arial, sans-serif;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 20px;
+    letter-spacing: 0em;
+    text-align: left;
+    color: #FFF;
+    margin: 0;
+    padding: 0;
+}
+
+.aboutproject__dataline {
+    display: flex;
+    flex-direction: row;
+    margin: 0;
+    padding: 0;
+}
+
+.aboutproject__line {
+    display: flex;
+    flex-direction: column;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 110px;
+}
+
+.aboutproject__block {
+    max-width: calc(100% / 5);
+    width: 100%;
+    height: 36px;
+    background-color: #3ddc84;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    font-family: 'Inter', Arial, sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 17px;
+    color: #FFF;
+}
+
+.aboutproject__block_type_colour {
+    color: #000;
+}
+
+.aboutproject__block_large {
+    max-width: calc(100% / 5 * 4);
+    width: 100%;
+    background-color: #303030;
+    color: #fff;
+}
+
+.aboutproject__block_colour {
+    background-color: #202020;
+    font-weight: 500;
+    color: #8b8b8b;
+}
+
+@media screen and (max-width: 768px) {
+    .aboutproject__container {
+        margin: 0 50px;
+    }
+
+    .aboutproject__header {
+        margin-top: 90px;
+    }
+
+    .aboutproject__table {
+        margin-bottom: 93px;
+    }
+
+    .aboutproject__line {
+        margin-bottom: 90px;
+    }
+
+    .aboutproject__text {
+        margin-right: 30px;
+    }
+
+    .aboutproject__paragraph {
+        font-size: 12px;
+        line-height: 18px;
+    }
+}
+
+@media screen and (max-width: 425px) {
+    .aboutproject__container {
+        margin: 0 18px;
+    }
+
+    .aboutproject__header {
+        margin-top: 70px;
+        padding-bottom: 28px;
+        font-size: 18px;
+        line-height: 22px;
+    }
+
+    .aboutproject__table {
+        margin: 60px 0;
+        flex-direction: column;
+    }
+
+    .aboutproject__text {
+        margin-right: 0;
+    }
+
+    .aboutproject__lead {
+        font-size: 18px;
+        line-height: 22px;
+        margin-bottom: 16px;
+    }
+
+    .aboutproject__paragraph {
+        font-size: 11px;
+        line-height: 16px;
+        margin-bottom: 56px;
+    }
+
+    .aboutproject__paragraph_type_small {
+        margin-bottom: 0;
+    }
+
+    .aboutproject__line {
+        max-width: 389px;
+        margin-bottom: 70px;
+    }
+
+    .aboutproject__block {
+        height: 35px;
+        font-size: 11px;
+        line-height: 13px;
+        max-width: calc(100% / 3);
+    }
+
+    .aboutproject__block_large {
+        max-width: calc(100% / 3 * 2);
+    }
+
+}
+
+@media screen and (max-width: 320px) {
+    .aboutproject__line {
+        max-width: 284px;
+    }
+}

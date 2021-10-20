@@ -1,0 +1,120 @@
+.footer {
+    max-width: 1280px;
+    background-color: #202020;
+    display: flex;
+    flex-direction: column;
+    margin-top: 79px;
+}
+
+.footer__container {
+    max-width: 1140px;
+    margin: 0 70px;
+}
+
+.footer__text {
+    font-family: 'Inter', Arial, sans-serif;
+    font-size: 13px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 16px;
+    letter-spacing: 0px;
+    text-align: center;
+    color: #8B8B8B;
+    border-bottom: 1px solid #424242;
+    max-width: 1140px;
+    padding-bottom: 20px;
+    margin: 0;
+}
+
+.footer__data {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    margin-top: 20px;
+    margin-left: 0;
+    margin-right: 0;
+    max-width: 1140px;
+}
+
+.footer__year {
+    font-family: 'Inter', Arial, sans-serif;
+    font-size: 13px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 16px;
+    letter-spacing: 0px;
+    text-align: left;
+    color: #FFF;
+    margin: 0;
+}
+
+.footer__links {
+    list-style: none;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin: 0;
+    padding: 0;
+}
+
+.footer__link {
+    font-family: 'Inter', Arial, sans-serif;
+    font-size: 13px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 16px;
+    letter-spacing: 0px;
+    text-align: right;
+    color: #FFF;
+    margin-right: 20px;
+}
+
+.footer__link:last-of-type {
+    margin-right: 0;
+}
+
+@media screen and (max-width: 768px) {
+    .footer__container {
+        margin: 0 30px;
+    }
+}
+
+@media screen and (max-width: 425px) {
+    .footer__container {
+        margin: 0 10px;
+    }
+
+    .footer__text {
+        padding-bottom: 21px;
+        font-size: 12px;
+        line-height: 14px;
+    }
+
+    .footer__data {
+        margin-top: 30px;
+        margin-bottom: 10px;
+        flex-direction: column-reverse;
+    }
+
+    .footer__links {
+        align-items: center;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .footer__link {
+        margin-right: 0;
+        margin-bottom: 12px;
+    }
+
+    .footer__link:last-of-type {
+        margin-bottom: 0;
+    }
+
+    .footer__year {
+        display: flex;
+        justify-content: center;
+        margin-top: 30px;
+    }
+}
